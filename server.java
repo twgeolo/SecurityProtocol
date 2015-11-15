@@ -20,6 +20,8 @@ public class server {
                             }
                             System.out.println();
                         }
+                        System.out.println();
+                        
                         ObjectInputStream input2 = new ObjectInputStream(socket.getInputStream());
                         String[][] array2 = (String[][])input2.readObject();
                         for(int counter = 0; counter < array2.length; counter++) {
@@ -28,6 +30,17 @@ public class server {
                             }
                             System.out.println();
                         }
+                        System.out.println();
+                        
+                        ObjectInputStream input3 = new ObjectInputStream(socket.getInputStream());
+                        String[][] array3 = (String[][])input3.readObject();
+                        for(int counter = 0; counter < array3.length; counter++) {
+                            for(int counter2 = 0; counter2 < array3[0].length; counter2++) {
+                                System.out.print(array3[counter][counter2] + " ");
+                            }
+                            System.out.println();
+                        }
+                        System.out.println();
                     } finally {
                         socket.close();
                     }
