@@ -9,6 +9,9 @@ import javax.swing.JOptionPane;
 import java.io.ObjectInputStream;
 
 public class client {
+    private static int tl = 0;
+    private static int rb = 0;
+    private static String[] isofunc;
     
     public static String[][] createMatrix(int size) {
         String matrix[][] = new String[size][size];
@@ -27,7 +30,7 @@ public class client {
     }
     
     public static String[][] isomorphism(String[][] matrix) {
-        String isofunc[] = new String[matrix.length];
+        isofunc = new String[matrix.length];
         int store[] = new int[matrix.length];
         for(int counter = 0; counter < matrix.length; counter++) {
             store[counter] = counter;
@@ -85,8 +88,8 @@ public class client {
     }
     
     public static String[][] supergraph(String[][] subgraph) {
-        int tl = (int)(Math.random()*41+10);
-        int rb = (int)(Math.random()*41+10);
+        tl = (int)(Math.random()*41+10);
+        rb = (int)(Math.random()*41+10);
         int rowLen = subgraph.length + tl + rb;
         String supgraph[][] = new String[rowLen][rowLen];
         for(int counter = 0; counter < tl; counter++) {
@@ -274,6 +277,22 @@ public class client {
                         bw3.write("\n");
                     }
                     bw3.close();
+                    
+                    File file4 = new File(ifile);
+                    if (!file4.exists()) {
+                        file4.createNewFile();
+                    }
+                    FileWriter fw4 = new FileWriter(file4.getAbsoluteFile());
+                    BufferedWriter bw4 = new BufferedWriter(fw4);
+                    bw4.write(String.valueOf(tl));
+                    bw4.write("\n");
+                    bw4.write(String.valueOf(rb));
+                    bw4.write("\n");
+                    for(int row = 0; row < isofunc.length; row++) {
+                        bw4.write(isofunc[row]);
+                        bw4.write("\n");
+                    }
+                    bw4.close();
                 }
                 catch (IOException e) {
                     System.out.println(e);
@@ -285,7 +304,7 @@ public class client {
             
         } else {
             try {
-                File file = new File("g1.txt");
+                File file = new File(g1file);
                 if (!file.exists()) {
                     file.createNewFile();
                 }
@@ -304,7 +323,7 @@ public class client {
                 }
                 bw.close();
                 
-                File file2 = new File("s.txt");
+                File file2 = new File(sfile);
                 if (!file2.exists()) {
                     file2.createNewFile();
                 }
@@ -321,7 +340,7 @@ public class client {
                 }
                 bw2.close();
 
-                File file3 = new File("g2.txt");
+                File file3 = new File(g2file);
                 if (!file3.exists()) {
                     file3.createNewFile();
                 }
@@ -337,6 +356,22 @@ public class client {
                     bw3.write("\n");
                 }
                 bw3.close();
+                
+                File file4 = new File(ifile);
+                if (!file4.exists()) {
+                    file4.createNewFile();
+                }
+                FileWriter fw4 = new FileWriter(file4.getAbsoluteFile());
+                BufferedWriter bw4 = new BufferedWriter(fw4);
+                bw4.write(String.valueOf(tl));
+                bw4.write("\n");
+                bw4.write(String.valueOf(rb));
+                bw4.write("\n");
+                for(int row = 0; row < isofunc.length; row++) {
+                    bw4.write(isofunc[row]);
+                    bw4.write("\n");
+                }
+                bw4.close();
             }
             catch (IOException e) {
                 System.out.println(e);
