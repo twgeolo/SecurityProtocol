@@ -1,10 +1,9 @@
+import java.io.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
 
-import java.io.*;
 public class server {
     public static void main (String[] args) {
         try {
@@ -13,8 +12,6 @@ public class server {
                 while (true) {
                     Socket socket = listener.accept();
                     try {
-                        //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                        //out.println("hello");
                         ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                         String[][] array = (String[][])input.readObject();
                         for(int counter = 0; counter < array.length; counter++) {

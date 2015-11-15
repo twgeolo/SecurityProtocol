@@ -9,26 +9,23 @@ import javax.swing.JOptionPane;
 import java.io.ObjectInputStream;
 
 public class client {
+    
     public static String[][] createMatrix(int size) {
         String matrix[][] = new String[size][size];
         for(int counter = 0; counter < size; counter++) {
             for(int counter2 = 0; counter2 < size; counter2++) {
                 int store = (int)Math.floor((Math.random()*2));
-                //System.out.print(store + " ");
                 matrix[counter][counter2] = String.valueOf(store);
-                //System.out.print(matrix[counter][counter] + " ");
             }
-            //System.out.println();
         }
         for(int counter3 = 0; counter3 < size; counter3++) {
             for(int counter4 = 0; counter4 < size; counter4++) {
                 matrix[counter3][counter4] = matrix[counter4][counter3];
-                //System.out.print(matrix[counter][counter] + " ");
             }
-            //System.out.println();
         }
         return matrix;
     }
+    
     public static void main (String[] args) {
         File f;
         int g1flag = 0;
@@ -163,13 +160,11 @@ public class client {
                 if(current == '\n') {
                     x++;
                     y = 0;
-                    //System.out.println("\n");
                     continue;
                 } else if(current == ' ') {
                     continue;
                 }
                 matrix[x][y] = String.valueOf(current);
-                //System.out.print(matrix[x][y]);
                 y++;
             }
             String matrixcopy[][] = new String[x][x];
@@ -188,13 +183,11 @@ public class client {
                 if(current == '\n') {
                     x++;
                     y = 0;
-                    //System.out.println("\n");
                     continue;
                 } else if(current == ' ') {
                     continue;
                 }
                 matrix2[x][y] = String.valueOf(current);
-                //System.out.print(matrix[x][y]);
                 y++;
             }
             String matrixcopy2[][] = new String[x][x];
@@ -203,7 +196,7 @@ public class client {
                     matrixcopy2[counter][counter2] = matrix2[counter][counter2];
                 }
             }
-        
+            
             ObjectOutputStream out = new ObjectOutputStream(MyClient.getOutputStream());
             out.writeObject(matrixcopy);
             ObjectOutputStream out2 = new ObjectOutputStream(MyClient.getOutputStream());
@@ -212,9 +205,6 @@ public class client {
         catch (IOException e) {
             System.out.println(e);
         }
-        /*catch (ClassNotFoundException e) {
-         System.out.println(e);
-         }*/
         System.exit(0);
     }
 }
