@@ -9,6 +9,26 @@ import javax.swing.JOptionPane;
 import java.io.ObjectInputStream;
 
 public class client {
+    public static String[][] createMatrix(int size) {
+        String matrix[][] = new String[size][size];
+        for(int counter = 0; counter < size; counter++) {
+            for(int counter2 = 0; counter2 < size; counter2++) {
+                int store = (int)Math.floor((Math.random()*2));
+                //System.out.print(store + " ");
+                matrix[counter][counter2] = String.valueOf(store);
+                //System.out.print(matrix[counter][counter] + " ");
+            }
+            //System.out.println();
+        }
+        for(int counter3 = 0; counter3 < size; counter3++) {
+            for(int counter4 = 0; counter4 < size; counter4++) {
+                matrix[counter3][counter4] = matrix[counter4][counter3];
+                //System.out.print(matrix[counter][counter] + " ");
+            }
+            //System.out.println();
+        }
+        return matrix;
+    }
     public static void main (String[] args) {
         File f;
         int g1flag = 0;
@@ -87,10 +107,6 @@ public class client {
                 counter += 1;
             }
         } else {
-            /*g1file = "g1.txt";
-             g2file = "g2.txt";
-             sfile = "s.txt";
-             ifile = "i.txt";*/
             try {
                 File file = new File("g1.txt");
                 if (!file.exists()) {
@@ -98,19 +114,37 @@ public class client {
                 }
                 FileWriter fw = new FileWriter(file.getAbsoluteFile());
                 BufferedWriter bw = new BufferedWriter(fw);
-                String matrix[][] = new String[2][2];
-                matrix[0][0]="0";
-                matrix[1][0]="1";
-                matrix[0][1]="2";
-                matrix[1][1]="3";
-                for(int row = 0; row < matrix.length; row++) {
-                    for(int col =0; col < matrix[row].length; col++) {
-                        bw.write(matrix[row][col]);
+                String g1matrix[][] = new String[1000][1000];
+                int range = (990 - 10) + 1;
+                int randomNum = (int)(Math.random()*range)+10;
+                g1matrix = createMatrix(randomNum);
+                for(int row = 0; row < g1matrix.length; row++) {
+                    for(int col =0; col < g1matrix[row].length; col++) {
+                        bw.write(g1matrix[row][col]);
                         bw.write(" ");
                     }
                     bw.write("\n");
                 }
                 bw.close();
+                
+                File file2 = new File("g2.txt");
+                if (!file2.exists()) {
+                    file2.createNewFile();
+                }
+                FileWriter fw2 = new FileWriter(file2.getAbsoluteFile());
+                BufferedWriter bw2 = new BufferedWriter(fw2);
+                String g2matrix[][] = new String[1000][1000];
+                int range2 = (990 - 10) + 1;
+                int randomNum2 = (int)(Math.random()*range2)+10;
+                g2matrix = createMatrix(randomNum2);
+                for(int row = 0; row < g2matrix.length; row++) {
+                    for(int col =0; col < g2matrix[row].length; col++) {
+                        bw2.write(g2matrix[row][col]);
+                        bw2.write(" ");
+                    }
+                    bw2.write("\n");
+                }
+                bw2.close();
             }
             catch (IOException e) {
                 System.out.println(e);
@@ -119,10 +153,9 @@ public class client {
         Socket MyClient;
         try {
             MyClient = new Socket("127.0.0.1", 9090);
-             int x = 0;
-             int y = 0;
-             String matrix[][] = new String[10000][10000];
-            
+            int x = 0;
+            int y = 0;
+            String matrix[][] = new String[1000][1000];
             FileInputStream inputStream = new FileInputStream(g1file);
             char current;
             while (inputStream.available() > 0) {
@@ -145,15 +178,36 @@ public class client {
                     matrixcopy[counter][counter2] = matrix[counter][counter2];
                 }
             }
-            String matrix2[][] = new String[2][2];
-            matrix2[0][0]="00";
-            matrix2[1][0]="10";
-            matrix2[0][1]="20";
-            matrix2[1][1]="30";
+            
+            x = 0;
+            y = 0;
+            String matrix2[][] = new String[1000][1000];
+            FileInputStream inputStream2 = new FileInputStream(g2file);
+            while (inputStream2.available() > 0) {
+                current = (char) inputStream2.read();
+                if(current == '\n') {
+                    x++;
+                    y = 0;
+                    //System.out.println("\n");
+                    continue;
+                } else if(current == ' ') {
+                    continue;
+                }
+                matrix2[x][y] = String.valueOf(current);
+                //System.out.print(matrix[x][y]);
+                y++;
+            }
+            String matrixcopy2[][] = new String[x][x];
+            for(int counter = 0; counter < x; counter++) {
+                for(int counter2 = 0; counter2 < x; counter2++) {
+                    matrixcopy2[counter][counter2] = matrix2[counter][counter2];
+                }
+            }
+        
             ObjectOutputStream out = new ObjectOutputStream(MyClient.getOutputStream());
             out.writeObject(matrixcopy);
             ObjectOutputStream out2 = new ObjectOutputStream(MyClient.getOutputStream());
-            out2.writeObject(matrix2);
+            out2.writeObject(matrixcopy2);
         }
         catch (IOException e) {
             System.out.println(e);
