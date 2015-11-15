@@ -131,6 +131,7 @@ public class client {
         int g2flag = 0;
         int sflag = 0;
         int iflag = 0;
+        int breakflag = 0;
         String g1file = "g1.txt";
         String g2file = "g2.txt";
         String sfile = "s.txt";
@@ -146,12 +147,14 @@ public class client {
                         f = new File(store[counter+1]);
                         if(!f.exists() || f.isDirectory()) {
                             System.out.println("Input valid file for g1.");
+                            breakflag = 1;
                         } else {
                             g1flag = 1;
                             g1file = store[counter+1];
                         }
                     } else {
                         System.out.println("Input valid file for g1.");
+                        breakflag = 1;
                         break;
                     }
                 } else if(args[counter].equals("-g2")) {
@@ -161,12 +164,14 @@ public class client {
                         f = new File(store[counter+1]);
                         if(!f.exists() || f.isDirectory()) {
                             System.out.println("Input valid file for g2.");
+                            breakflag = 1;
                         } else {
                             g2flag = 1;
                             g2file = store[counter+1];
                         }
                     } else {
                         System.out.println("Input valid file for g2.");
+                        breakflag = 1;
                         break;
                     }
                 } else if(args[counter].equals("-s")) {
@@ -176,12 +181,14 @@ public class client {
                         f = new File(store[counter+1]);
                         if(!f.exists() || f.isDirectory()) {
                             System.out.println("Input valid file for s.");
+                            breakflag = 1;
                         } else {
                             sflag = 1;
                             sfile = store[counter+1];
                         }
                     } else {
                         System.out.println("Input valid file for s.");
+                        breakflag = 1;
                         break;
                     }
                 } else if(args[counter].equals("-i")) {
@@ -191,17 +198,91 @@ public class client {
                         f = new File(store[counter+1]);
                         if(!f.exists() || f.isDirectory()) {
                             System.out.println("Input valid file for i.");
+                            breakflag = 1;
                         } else {
                             iflag = 1;
                             ifile = store[counter+1];
                         }
                     } else {
                         System.out.println("Input valid file for i.");
+                        breakflag = 1;
                         break;
                     }
                 }
                 counter += 1;
             }
+            if(breakflag == 1) {
+                System.exit(1);
+            }
+            if(g1flag == 1 && g2flag == 1 && sflag == 1 && iflag == 1) {
+            } else if(g1flag == 1 && g2flag == 0 && sflag == 0 && iflag == 0) {
+                try {
+                    int x = 0;
+                    int y = 0;
+                    String g1matrix[][] = new String[1000][1000];
+                    FileInputStream inputStream = new FileInputStream(g1file);
+                    char current;
+                    while (inputStream.available() > 0) {
+                        current = (char) inputStream.read();
+                        if(current == '\n') {
+                            x++;
+                            y = 0;
+                            continue;
+                        } else if(current == ' ') {
+                            continue;
+                        }
+                        g1matrix[x][y] = String.valueOf(current);
+                        y++;
+                    }
+                    String g1matrixcopy[][] = new String[x][x];
+                    for(int c = 0; c < x; c++) {
+                        for(int c2 = 0; c2 < x; c2++) {
+                            g1matrixcopy[c][c2] = g1matrix[c][c2];
+                        }
+                    }
+                    
+                    File file2 = new File(sfile);
+                    if (!file2.exists()) {
+                        file2.createNewFile();
+                    }
+                    FileWriter fw2 = new FileWriter(file2.getAbsoluteFile());
+                    BufferedWriter bw2 = new BufferedWriter(fw2);
+                    String smatrix[][] = new String[1000][1000];
+                    smatrix = isomorphism(g1matrixcopy);
+                    for(int row = 0; row < smatrix.length; row++) {
+                        for(int col =0; col < smatrix[row].length; col++) {
+                            bw2.write(smatrix[row][col]);
+                            bw2.write(" ");
+                        }
+                        bw2.write("\n");
+                    }
+                    bw2.close();
+                    
+                    File file3 = new File(g2file);
+                    if (!file3.exists()) {
+                        file3.createNewFile();
+                    }
+                    FileWriter fw3 = new FileWriter(file3.getAbsoluteFile());
+                    BufferedWriter bw3 = new BufferedWriter(fw3);
+                    String g2matrix[][] = new String[1100][1100];
+                    g2matrix = supergraph(smatrix);
+                    for(int row = 0; row < g2matrix.length; row++) {
+                        for(int col =0; col < g2matrix[row].length; col++) {
+                            bw3.write(g2matrix[row][col]);
+                            bw3.write(" ");
+                        }
+                        bw3.write("\n");
+                    }
+                    bw3.close();
+                }
+                catch (IOException e) {
+                    System.out.println(e);
+                }
+            } else {
+                System.out.println("Files needed");
+                System.exit(0);
+            }
+            
         } else {
             try {
                 File file = new File("g1.txt");
