@@ -457,12 +457,17 @@ public class client {
             /*ObjectOutputStream out3 = new ObjectOutputStream(MyClient.getOutputStream());
              out3.writeObject(matrixcopy3);*/
             int num;
+            int runnum = 1;
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(MyClient.getInputStream()));
             while((num = stdIn.read()) != -1) {
                 if(Integer.parseInt(String.valueOf((char)num)) == 0) {
-                    //System.out.println("0");
+                    System.out.println("Run #" + runnum);
+                    runnum++;
+                    System.out.println("alpha and Q requested");
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 1) {
-                    //System.out.println("1");
+                    System.out.println("Run #" + runnum);
+                    runnum++;
+                    System.out.println("pi and subgraph Q' requested");
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 2) {
                     break;
                 }

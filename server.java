@@ -46,11 +46,13 @@ public class server {
                          System.out.println();*/
                         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                         while(flag < runtimes) {
+                            int runnum = flag + 1;
+                            System.out.println("Run #" + runnum);
                             int value = (int)(Math.random()*2);
                             if(value == 0) {
                                 System.out.println("Requesting for alpha and Q");
                             } else if(value == 1) {
-                                System.out.println("Requesting for pi and subgraph Q prime");
+                                System.out.println("Requesting for pi and subgraph Q'");
                             }
                             writer.write(String.valueOf(value));
                             writer.flush();
