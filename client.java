@@ -339,7 +339,7 @@ public class client {
                     bw2.write("\n");
                 }
                 bw2.close();
-
+                
                 File file3 = new File(g2file);
                 if (!file3.exists()) {
                     file3.createNewFile();
@@ -406,8 +406,8 @@ public class client {
             
             x = 0;
             y = 0;
-            String matrix2[][] = new String[1000][1000];
-            FileInputStream inputStream2 = new FileInputStream(sfile);
+            String matrix2[][] = new String[1100][1100];
+            FileInputStream inputStream2 = new FileInputStream(g2file);
             while (inputStream2.available() > 0) {
                 current = (char) inputStream2.read();
                 if(current == '\n') {
@@ -427,39 +427,51 @@ public class client {
                 }
             }
             
-            x = 0;
-            y = 0;
-            String matrix3[][] = new String[1100][1100];
-            FileInputStream inputStream3 = new FileInputStream(g2file);
-            while (inputStream3.available() > 0) {
-                current = (char) inputStream3.read();
-                if(current == '\n') {
-                    x++;
-                    y = 0;
-                    continue;
-                } else if(current == ' ') {
-                    continue;
-                }
-                matrix3[x][y] = String.valueOf(current);
-                y++;
-            }
-            String matrixcopy3[][] = new String[x][x];
-            for(int counter = 0; counter < x; counter++) {
-                for(int counter2 = 0; counter2 < x; counter2++) {
-                    matrixcopy3[counter][counter2] = matrix3[counter][counter2];
-                }
-            }
+            /*x = 0;
+             y = 0;
+             String matrix3[][] = new String[1100][1100];
+             FileInputStream inputStream3 = new FileInputStream(g2file);
+             while (inputStream3.available() > 0) {
+             current = (char) inputStream3.read();
+             if(current == '\n') {
+             x++;
+             y = 0;
+             continue;
+             } else if(current == ' ') {
+             continue;
+             }
+             matrix3[x][y] = String.valueOf(current);
+             y++;
+             }
+             String matrixcopy3[][] = new String[x][x];
+             for(int counter = 0; counter < x; counter++) {
+             for(int counter2 = 0; counter2 < x; counter2++) {
+             matrixcopy3[counter][counter2] = matrix3[counter][counter2];
+             }
+             }*/
             
             ObjectOutputStream out = new ObjectOutputStream(MyClient.getOutputStream());
             out.writeObject(matrixcopy);
             ObjectOutputStream out2 = new ObjectOutputStream(MyClient.getOutputStream());
             out2.writeObject(matrixcopy2);
-            ObjectOutputStream out3 = new ObjectOutputStream(MyClient.getOutputStream());
-            out3.writeObject(matrixcopy3);
+            /*ObjectOutputStream out3 = new ObjectOutputStream(MyClient.getOutputStream());
+             out3.writeObject(matrixcopy3);*/
+            int num;
+            BufferedReader stdIn = new BufferedReader(new InputStreamReader(MyClient.getInputStream()));
+            while((num = stdIn.read()) != -1) {
+                if(Integer.parseInt(String.valueOf((char)num)) == 0) {
+                    //System.out.println("0");
+                } else if(Integer.parseInt(String.valueOf((char)num)) == 1) {
+                    //System.out.println("1");
+                } else if(Integer.parseInt(String.valueOf((char)num)) == 2) {
+                    break;
+                }
+            }
         }
         catch (IOException e) {
             System.out.println(e);
         }
+        
         System.exit(0);
     }
 }
