@@ -17,7 +17,7 @@ import java.net.*;
 
 public class client {
 	
-	public server() {
+	public client() {
     	JFrame mainFrame = new JFrame("Server UI");
 
 		// History Bar
