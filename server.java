@@ -7,7 +7,7 @@ import java.util.*;
 
 public class server {
     public static void main (String[] args) {
-        int runtimes = (int)(Math.random()*11+5);
+        int runtimes = (int)(Math.random()*11+5);  //5 to 15 times
         int flag = 0, flag2 = 0;
         try {
             ServerSocket listener = new ServerSocket(9090);
@@ -57,6 +57,17 @@ public class server {
                             writer.write(String.valueOf(value));
                             writer.flush();
                             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                            if(value == 0) {
+                                ObjectInputStream input3 = new ObjectInputStream(socket.getInputStream());
+                                String[] alpha = (String[])input.readObject();
+                                ObjectInputStream input4 = new ObjectInputStream(socket.getInputStream());
+                                String[][] g3matrix = (String[][])input.readObject();
+                            } else if(value == 1) {
+                                ObjectInputStream input3 = new ObjectInputStream(socket.getInputStream());
+                                String[] pi = (String[])input.readObject();
+                                ObjectInputStream input4 = new ObjectInputStream(socket.getInputStream());
+                                String[][] g3primematrix = (String[][])input.readObject();
+                            }
                             flag++;
                         }
                         writer.write(String.valueOf(2));

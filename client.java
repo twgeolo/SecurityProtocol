@@ -12,6 +12,7 @@ public class client {
     private static int tl = 0;
     private static int rb = 0;
     private static String[] isofunc;
+    private static String[] isofunc2;
     
     public static String[][] createMatrix(int size) {
         String matrix[][] = new String[size][size];
@@ -29,59 +30,115 @@ public class client {
         return matrix;
     }
     
-    public static String[][] isomorphism(String[][] matrix) {
-        isofunc = new String[matrix.length];
-        int store[] = new int[matrix.length];
-        for(int counter = 0; counter < matrix.length; counter++) {
-            store[counter] = counter;
-        }
-        int check, flag = 0;
-        for(int counter = 0; counter < matrix.length; counter++) {
-            check = (int)(Math.random()*(matrix.length));
-            for(int counter2 = 0; counter2 < matrix.length; counter2++) {
-                if(store[check] == (matrix.length+1)) {
-                    flag = 1;
-                    break;
-                }
-            }
-            if(flag == 1) {
-                flag = 0;
-                counter--;
-                continue;
-            } else {
-                isofunc[counter] = String.valueOf(check);
-            }
-            store[check] = matrix.length+1;
-        }
-        String oneOnly[][] = new String[matrix.length][matrix.length];
-        int counter3;
-        String newGraph[][] = new String[matrix.length][matrix.length];
-        for(int counter = 0; counter < matrix.length; counter++) {
-            counter3 = 0;
-            for(int counter2 = 0; counter2 < matrix.length; counter2++) {
-                if(Integer.parseInt(matrix[counter][counter2]) == 1) {
-                    oneOnly[counter][counter3] = String.valueOf(counter2);
-                    newGraph[counter][counter3] = isofunc[Integer.parseInt(oneOnly[counter][counter3])];
-                    counter3++;
-                }
-            }
-        }
-        String rowSwitch[][] = new String[matrix.length][matrix.length];
-        for(int counter = 0; counter < matrix.length; counter++) {
-            rowSwitch[Integer.parseInt(isofunc[counter])] = newGraph[counter];
-        }
+    public static String[][] isomorphism(String[][] matrix, int number) {
         String newMatrix[][] = new String[matrix.length][matrix.length];
-        for(int counter = 0; counter < matrix.length; counter++) {
-            for(int counter2 = 0; counter2 < matrix.length; counter2++) {
-                newMatrix[counter][counter2] = String.valueOf(0);
+        if(number == 0) {
+            isofunc = new String[matrix.length];
+            int store[] = new int[matrix.length];
+            for(int counter = 0; counter < matrix.length; counter++) {
+                store[counter] = counter;
             }
-        }
-        for(int counter = 0; counter < matrix.length; counter++) {
-            for(int counter2 = 0; counter2 < matrix.length; counter2++) {
-                if(rowSwitch[counter][counter2] == null) {
-                    break;
+            int check, flag = 0;
+            for(int counter = 0; counter < matrix.length; counter++) {
+                check = (int)(Math.random()*(matrix.length));
+                for(int counter2 = 0; counter2 < matrix.length; counter2++) {
+                    if(store[check] == (matrix.length+1)) {
+                        flag = 1;
+                        break;
+                    }
                 }
-                newMatrix[counter][Integer.parseInt(rowSwitch[counter][counter2])] = String.valueOf(1);
+                if(flag == 1) {
+                    flag = 0;
+                    counter--;
+                    continue;
+                } else {
+                    isofunc[counter] = String.valueOf(check);
+                }
+                store[check] = matrix.length+1;
+            }
+            String oneOnly[][] = new String[matrix.length][matrix.length];
+            int counter3;
+            String newGraph[][] = new String[matrix.length][matrix.length];
+            for(int counter = 0; counter < matrix.length; counter++) {
+                counter3 = 0;
+                for(int counter2 = 0; counter2 < matrix.length; counter2++) {
+                    if(Integer.parseInt(matrix[counter][counter2]) == 1) {
+                        oneOnly[counter][counter3] = String.valueOf(counter2);
+                        newGraph[counter][counter3] = isofunc[Integer.parseInt(oneOnly[counter][counter3])];
+                        counter3++;
+                    }
+                }
+            }
+            String rowSwitch[][] = new String[matrix.length][matrix.length];
+            for(int counter = 0; counter < matrix.length; counter++) {
+                rowSwitch[Integer.parseInt(isofunc[counter])] = newGraph[counter];
+            }
+            for(int counter = 0; counter < matrix.length; counter++) {
+                for(int counter2 = 0; counter2 < matrix.length; counter2++) {
+                    newMatrix[counter][counter2] = String.valueOf(0);
+                }
+            }
+            for(int counter = 0; counter < matrix.length; counter++) {
+                for(int counter2 = 0; counter2 < matrix.length; counter2++) {
+                    if(rowSwitch[counter][counter2] == null) {
+                        break;
+                    }
+                    newMatrix[counter][Integer.parseInt(rowSwitch[counter][counter2])] = String.valueOf(1);
+                }
+            }
+        } else {
+            isofunc2 = new String[matrix.length];
+            int store[] = new int[matrix.length];
+            for(int counter = 0; counter < matrix.length; counter++) {
+                store[counter] = counter;
+            }
+            int check, flag = 0;
+            for(int counter = 0; counter < matrix.length; counter++) {
+                check = (int)(Math.random()*(matrix.length));
+                for(int counter2 = 0; counter2 < matrix.length; counter2++) {
+                    if(store[check] == (matrix.length+1)) {
+                        flag = 1;
+                        break;
+                    }
+                }
+                if(flag == 1) {
+                    flag = 0;
+                    counter--;
+                    continue;
+                } else {
+                    isofunc2[counter] = String.valueOf(check);
+                }
+                store[check] = matrix.length+1;
+            }
+            String oneOnly[][] = new String[matrix.length][matrix.length];
+            int counter3;
+            String newGraph[][] = new String[matrix.length][matrix.length];
+            for(int counter = 0; counter < matrix.length; counter++) {
+                counter3 = 0;
+                for(int counter2 = 0; counter2 < matrix.length; counter2++) {
+                    if(Integer.parseInt(matrix[counter][counter2]) == 1) {
+                        oneOnly[counter][counter3] = String.valueOf(counter2);
+                        newGraph[counter][counter3] = isofunc2[Integer.parseInt(oneOnly[counter][counter3])];
+                        counter3++;
+                    }
+                }
+            }
+            String rowSwitch[][] = new String[matrix.length][matrix.length];
+            for(int counter = 0; counter < matrix.length; counter++) {
+                rowSwitch[Integer.parseInt(isofunc2[counter])] = newGraph[counter];
+            }
+            for(int counter = 0; counter < matrix.length; counter++) {
+                for(int counter2 = 0; counter2 < matrix.length; counter2++) {
+                    newMatrix[counter][counter2] = String.valueOf(0);
+                }
+            }
+            for(int counter = 0; counter < matrix.length; counter++) {
+                for(int counter2 = 0; counter2 < matrix.length; counter2++) {
+                    if(rowSwitch[counter][counter2] == null) {
+                        break;
+                    }
+                    newMatrix[counter][Integer.parseInt(rowSwitch[counter][counter2])] = String.valueOf(1);
+                }
             }
         }
         return newMatrix;
@@ -126,6 +183,32 @@ public class client {
             a++;
         }
         return supgraph;
+    }
+    
+    public static String[][] subgraph(String[][] supergraph) {
+        int rowLen = supergraph.length - tl - rb;
+        String subgraph[][] = new String[rowLen][rowLen];
+        int a = 0, b = 0;
+        for(int counter = tl; counter < supergraph.length-rb; counter++) {
+            b = 0;
+            for(int counter2 = tl; counter2 < supergraph.length-rb; counter2++) {
+                subgraph[a][b] = supergraph[counter][counter2];
+                b++;
+            }
+            a++;
+        }
+        return subgraph;
+    }
+    
+    public static String[] generatepi(String[] iso1, String[] iso2, int top, int bot) {
+        String[] pi = new String[iso1.length];
+        for(int counter = 0; counter < iso1.length; counter++) {
+            int phi = Integer.parseInt(iso1[counter]);
+            int phitop =  phi + top;
+            String alphavalue = iso2[phitop];
+            pi[counter] = alphavalue;
+        }
+        return pi;
     }
     
     public static void main (String[] args) {
@@ -251,7 +334,7 @@ public class client {
                     FileWriter fw2 = new FileWriter(file2.getAbsoluteFile());
                     BufferedWriter bw2 = new BufferedWriter(fw2);
                     String smatrix[][] = new String[1000][1000];
-                    smatrix = isomorphism(g1matrixcopy);
+                    smatrix = isomorphism(g1matrixcopy, 0);
                     for(int row = 0; row < smatrix.length; row++) {
                         for(int col =0; col < smatrix[row].length; col++) {
                             bw2.write(smatrix[row][col]);
@@ -330,7 +413,7 @@ public class client {
                 FileWriter fw2 = new FileWriter(file2.getAbsoluteFile());
                 BufferedWriter bw2 = new BufferedWriter(fw2);
                 String smatrix[][] = new String[1000][1000];
-                smatrix = isomorphism(g1matrix);
+                smatrix = isomorphism(g1matrix, 0);
                 for(int row = 0; row < smatrix.length; row++) {
                     for(int col =0; col < smatrix[row].length; col++) {
                         bw2.write(smatrix[row][col]);
@@ -456,18 +539,47 @@ public class client {
             out2.writeObject(matrixcopy2);
             /*ObjectOutputStream out3 = new ObjectOutputStream(MyClient.getOutputStream());
              out3.writeObject(matrixcopy3);*/
+            /*for(int counter = 0; counter < matrixcopy.length; counter++) {
+             for(int counter2 = 0; counter2 < matrixcopy.length; counter2++) {
+             System.out.print(matrixcopy[counter][counter2] + " ");
+             }
+             System.out.println();
+             }
+             System.out.println();
+             for(int counter = 0; counter < matrixcopy2.length; counter++) {
+             for(int counter2 = 0; counter2 < matrixcopy2.length; counter2++) {
+             System.out.print(matrixcopy2[counter][counter2] + " ");
+             }
+             System.out.println();
+             }
+             System.out.println();*/
             int num;
             int runnum = 1;
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(MyClient.getInputStream()));
             while((num = stdIn.read()) != -1) {
+                String g3matrix[][] = new String[matrixcopy2.length][matrixcopy2.length];
+                g3matrix = isomorphism(matrixcopy2, 1);
+                String pi[] = new String[isofunc.length];
+                pi = generatepi(isofunc,isofunc2,tl,rb);
+                String matrixcopy3[][] = new String[matrixcopy.length][matrixcopy.length];
+                String g3primematrix[][] = new String[1000][1000];
+                g3primematrix = subgraph(g3matrix);
                 if(Integer.parseInt(String.valueOf((char)num)) == 0) {
                     System.out.println("Run #" + runnum);
                     runnum++;
-                    System.out.println("alpha and Q requested");
+                    System.out.println("alpha and G3 requested");
+                    ObjectOutputStream out3 = new ObjectOutputStream(MyClient.getOutputStream());
+                    out3.writeObject(isofunc2);
+                    ObjectOutputStream out4 = new ObjectOutputStream(MyClient.getOutputStream());
+                    out4.writeObject(g3matrix);
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 1) {
                     System.out.println("Run #" + runnum);
                     runnum++;
-                    System.out.println("pi and subgraph Q' requested");
+                    System.out.println("pi and subgraph G3' requested");
+                    ObjectOutputStream out3 = new ObjectOutputStream(MyClient.getOutputStream());
+                    out3.writeObject(pi);
+                    ObjectOutputStream out4 = new ObjectOutputStream(MyClient.getOutputStream());
+                    out4.writeObject(g3primematrix);
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 2) {
                     break;
                 }
