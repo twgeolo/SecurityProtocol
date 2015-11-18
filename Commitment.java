@@ -32,14 +32,23 @@ class SHA1_class {
 }
 
 public class Commitment {
-	// public static void main(String[] args) {
-	// 	String[][] m = getRandMatrix(9,9);
-	// 	for (int i = 0; i < m.length; i++){
-	// 		for (int j = 0; j < m.length; j++)
-	// 			System.out.print(m[i][j]);
-	// 		System.out.println();
-	// 	}
-	// }
+	public static void main(String[] args) {
+		String[][] list1 = getRandMatrix(9,9);
+		String[][] list2 = getRandMatrix(9,9);
+		String[][] bitlist = getRandMatrix(9,9);
+
+		String[][] result = bitCommit_HASH_SHA2_list(list1, list2, bitlist);
+
+		// for (int i = 0; i < result.length; i++){
+		// 	for (int j = 0; j < result.length; j++){
+		// 		System.out.println(list1[i][j]);
+		// 		System.out.println(list2[i][j]);
+		// 		System.out.println(bitlist[i][j]);
+		// 		System.out.println(result[i][j]);
+		// 	}
+		// 	System.out.println();
+		// }
+	}
 	
 	public static String[][] bitCommit_HASH_SHA2_list(String[][] list1, String[][] list2, String[][] bitList){
 		String[][] commitment = new String[bitList.length][bitList.length];
