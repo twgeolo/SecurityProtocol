@@ -7,8 +7,85 @@ import java.io.File;
 import java.io.FileWriter;
 import javax.swing.JOptionPane;
 import java.io.ObjectInputStream;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.net.*;
 
 public class client {
+	
+	public client() {
+    	JFrame mainFrame = new JFrame("Client UI");
+
+		// History Bar
+
+    	JLabel historyBar = new JLabel("History", JLabel.CENTER);
+		Font font = new Font("Helvetica Neue", Font.BOLD, 18);
+    	historyBar.setFont(font);
+    	historyBar.setForeground(Color.black);
+    	historyBar.setBackground(Color.white);
+    	historyBar.setOpaque(true);
+		historyBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+    	historyBar.setBounds(0, 0, 240, 33);
+		mainFrame.getContentPane().add(historyBar);
+		
+		// History List
+
+		HistoryEntry[] entries = {
+		      new HistoryEntry("Received 1", "Past.png"),
+		      new HistoryEntry("Received 2", "Past.png"),
+		      new HistoryEntry("Received 3", "Past.png"),
+		      new HistoryEntry("Received 4", "Past.png"),
+		      new HistoryEntry("Received 5", "Past.png"),
+		      new HistoryEntry("Received 6", "Past.png"),
+		      new HistoryEntry("Received 7", "Past.png"),
+		      new HistoryEntry("Received 8", "Past.png"),
+		      new HistoryEntry("Received 9", "Past.png")
+		};
+    	JList<HistoryEntry> list = new JList<HistoryEntry>(entries);
+		font = new Font("Helvetica Neue", Font.PLAIN, 15);
+    	list.setFont(font);
+    	list.setCellRenderer(new HistoryCellRenderer());
+    	JScrollPane history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		history.setBorder(BorderFactory.createEmptyBorder());
+    	history.setBounds(0, 33, 240, 522);
+		mainFrame.getContentPane().add(history);
+		
+		// Main
+
+    	JLabel mainBar = new JLabel("Main", JLabel.CENTER);
+		font = new Font("Helvetica Neue", Font.BOLD, 18);
+    	mainBar.setFont(font);
+    	mainBar.setForeground(Color.black);
+    	mainBar.setBackground(Color.white);
+    	mainBar.setOpaque(true);
+		mainBar.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 0, Color.gray));
+    	mainBar.setBounds(240, 0, 528, 33);
+		mainFrame.getContentPane().add(mainBar);
+		
+		// Victor image
+		
+		JLabel imageLabel = new JLabel(this.getImage("Peggy.png"));
+		imageLabel.setBounds(454, 238, 100, 100);
+		mainFrame.getContentPane().add(imageLabel);
+		
+		mainFrame.pack();
+    	mainFrame.setResizable(false);
+    	mainFrame.setSize(768,576);
+    	mainFrame.setLayout(null);
+    	mainFrame.setVisible(true);
+	}
+	
+	private ImageIcon getImage(String path) {
+	    URL url = getClass().getResource(path);
+	    if (url != null)
+	        return new ImageIcon(url);
+	    return null;
+	}
+	
     private static int tl = 0;
     private static int rb = 0;
     private static String[] isofunc;
@@ -212,6 +289,7 @@ public class client {
     }
     
     public static void main (String[] args) {
+		new client();
         File f;
         int g1flag = 0;
         int g2flag = 0;
