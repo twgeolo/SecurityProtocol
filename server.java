@@ -73,7 +73,7 @@ public class server {
 		
 		// Victor chat box
 		
-		JLabel chatLabel = new JLabel("Victor", JLabel.CENTER);
+		JLabel chatLabel = new JLabel("Let's begin", JLabel.CENTER);
 		font = new Font("Helvetica Neue", Font.PLAIN, 15);
 		chatLabel.setFont(font);
 		chatLabel.setForeground(Color.black);
