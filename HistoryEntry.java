@@ -1,3 +1,4 @@
+import javax.swing.*;
 import javax.imageio.ImageIO;
 
 class HistoryEntry {
