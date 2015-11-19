@@ -19,11 +19,17 @@ import javax.swing.event.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.net.*;
+import javax.swing.text.*;
 
 public class client {
-	
-	public client() {
-    	JFrame mainFrame = new JFrame("Server UI");
+
+	static JScrollPane history;
+	static JTextPane chatLabel;
+	static HistoryEntry[] entries;
+	static JList<HistoryEntry> list;
+
+	public static void setupUI() {
+    	JFrame mainFrame = new JFrame("Client UI");
 
 		// History Bar
 
@@ -34,27 +40,19 @@ public class client {
     	historyBar.setBackground(Color.white);
     	historyBar.setOpaque(true);
 		historyBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
-		
+
 		// History List
 
-		HistoryEntry[] entries = {
-		      new HistoryEntry("Requesting 1", "Past.png"),
-		      new HistoryEntry("Requesting 2", "Past.png"),
-		      new HistoryEntry("Requesting 3", "Past.png"),
-		      new HistoryEntry("Requesting 4", "Past.png"),
-		      new HistoryEntry("Requesting 5", "Past.png"),
-		      new HistoryEntry("Requesting 6", "Past.png"),
-		      new HistoryEntry("Requesting 7", "Past.png"),
-		      new HistoryEntry("Requesting 8", "Past.png"),
-		      new HistoryEntry("Requesting 9", "Past.png")
+		entries = new HistoryEntry[] {
+			new HistoryEntry("Let's begin", "Past.png")
 		};
-    	JList<HistoryEntry> list = new JList<HistoryEntry>(entries);
+    	list = new JList<HistoryEntry>(entries);
 		font = new Font("Helvetica Neue", Font.PLAIN, 15);
     	list.setFont(font);
     	list.setCellRenderer(new HistoryCellRenderer());
-    	JScrollPane history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    	history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		history.setBorder(BorderFactory.createEmptyBorder());
-		
+
 		// Main
 
     	JLabel mainBar = new JLabel("Main", JLabel.CENTER);
@@ -64,66 +62,78 @@ public class client {
     	mainBar.setBackground(Color.white);
     	mainBar.setOpaque(true);
 		mainBar.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 0, Color.gray));
-		
+
 		// Victor image
-		
-		ImagePanel victorPanel = new ImagePanel("Peggy.png");
-		victorPanel.setBackground(Color.white);
-		
+
+		ImagePanel peggyPanel = new ImagePanel("Peggy.png");
+		peggyPanel.setBackground(Color.white);
+
 		// Victor label
-		
-		JLabel victorLabel = new JLabel("Peggy", JLabel.CENTER);
+
+		JLabel peggyLabel = new JLabel("Peggy", JLabel.CENTER);
 		font = new Font("Helvetica Neue", Font.BOLD, 20);
-		victorLabel.setFont(font);
-		victorLabel.setForeground(Color.black);
-		victorLabel.setBackground(Color.white);
-		victorLabel.setOpaque(true);
-		
+		peggyLabel.setFont(font);
+		peggyLabel.setForeground(Color.black);
+		peggyLabel.setBackground(Color.white);
+		peggyLabel.setOpaque(true);
+
 		// Victor chat box
-		
-		JLabel chatLabel = new JLabel("Peggy", JLabel.CENTER);
+
+		chatLabel = new JTextPane();
 		font = new Font("Helvetica Neue", Font.PLAIN, 15);
 		chatLabel.setFont(font);
+		chatLabel.setText("Let's begin");
 		chatLabel.setForeground(Color.black);
 		chatLabel.setBackground(Color.white);
 		chatLabel.setBorder(new RoundedBorder(Color.BLACK, 20));
 		chatLabel.setOpaque(true);
-		
+		StyledDocument doc = chatLabel.getStyledDocument();
+		SimpleAttributeSet center = new SimpleAttributeSet();
+		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+		doc.setParagraphAttributes(0, doc.getLength(), center, false);
+
 		// Set the bounds
-		
-    	historyBar.setBounds(0, 0, 240, 33);
-    	history.setBounds(0, 33, 240, 522);
-    	mainBar.setBounds(240, 0, 528, 33);
-		victorPanel.setBounds(454, 288, 100, 100);
-		victorLabel.setBounds(454, 388, 100, 30);
-		chatLabel.setBounds(354, 138, 300, 100);
-		
+
+    	historyBar.setBounds(0, 0, 320, 33);
+    	history.setBounds(0, 33, 320, 522);
+    	mainBar.setBounds(320, 0, 448, 33);
+		peggyPanel.setBounds(494, 288, 100, 100);
+		peggyLabel.setBounds(494, 388, 100, 30);
+		chatLabel.setBounds(369, 163, 350, 40);
+
 		// Add the subviews
-		
+
 		mainFrame.getContentPane().add(historyBar);
 		mainFrame.getContentPane().add(history);
 		mainFrame.getContentPane().add(mainBar);
-		mainFrame.getContentPane().add(victorPanel);
-		mainFrame.getContentPane().add(victorLabel);
+		mainFrame.getContentPane().add(peggyPanel);
+		mainFrame.getContentPane().add(peggyLabel);
 		mainFrame.getContentPane().add(chatLabel);
-		
+
 		mainFrame.getContentPane().setBackground(Color.white);
+		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     	mainFrame.setResizable(false);
     	mainFrame.setSize(768,576);
     	mainFrame.setLayout(null);
     	mainFrame.setVisible(true);
 	}
-	
+
+	public static void setTextToLabel(String str) {
+		String listText = "<html>" + str.replaceAll(": ", "<br>") + "</html>";
+		int length = entries.length;
+    	HistoryEntry[] array = Arrays.copyOf(entries, length + 1);
+    	array[length] = new HistoryEntry(listText, "Past.png");
+		entries = array;
+		list.setListData(entries);
+     	history.revalidate();
+     	history.repaint();
+		chatLabel.setText(str);
+	}
+
     private static int tl = 0;
     private static int rb = 0;
     private static String[] isofunc;
     private static String[] isofunc2;
-    private static ObjectOutputStream out;
-    private static ObjectOutputStream out2;
-    private static ObjectOutputStream out3;
-    private static ObjectOutputStream out4;
-    private static ObjectOutputStream outmG3;
-    
     public static String[][] createMatrix(int size) {
         String matrix[][] = new String[size][size];
         for(int counter = 0; counter < size; counter++) {
@@ -139,7 +149,7 @@ public class client {
         }
         return matrix;
     }
-    
+
     public static String[][] isomorphism(String[][] matrix, int number) {
         String newMatrix[][] = new String[matrix.length][matrix.length];
         if(number == 0) {
@@ -253,7 +263,7 @@ public class client {
         }
         return newMatrix;
     }
-    
+
     private static String convToHex(byte[] data) {
         StringBuilder buf = new StringBuilder();
         for (int i = 0; i < data.length; i++) {
@@ -269,7 +279,7 @@ public class client {
         }
         return buf.toString();
     }
-    
+
     public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException  {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         byte[] sha1hash = new byte[40];
@@ -278,7 +288,7 @@ public class client {
         return convToHex(sha1hash);
     }
 
-    
+
     public static String[][] bitCommit_HASH_SHA2_list(String[][] list1, String[][] list2, String[][] bitList){
         String[][] commitment = new String[bitList.length][bitList.length];
         for (int i = 0; i < bitList.length; i++){
@@ -295,7 +305,7 @@ public class client {
         }
         return commitment;
     }
-    
+
     public static String[][] getRandMatrix(int size, int maxRandValue){
         Random random = new Random();
         String[][] matrix = new String[size][size];
@@ -306,7 +316,7 @@ public class client {
         }
         return matrix;
     }
-    
+
     public static String[][] supergraph(String[][] subgraph) {
         tl = (int)(Math.random()*41+10);
         rb = (int)(Math.random()*41+10);
@@ -349,7 +359,7 @@ public class client {
         }
         return supgraph;
     }
-    
+
     public static String[][] subgraph(String[][] supergraph) {
         int rowLen = supergraph.length - tl - rb;
         String subgraph[][] = new String[rowLen][rowLen];
@@ -364,7 +374,7 @@ public class client {
         }
         return subgraph;
     }
-    
+
     public static String[] generatepi(String[] iso1, String[] iso2, int top, int bot) {
         String[] pi = new String[iso1.length];
         for(int counter = 0; counter < iso1.length; counter++) {
@@ -375,9 +385,9 @@ public class client {
         }
         return pi;
     }
-    
+
     public static void main (String[] args) {
-		new client();
+		setupUI();
         File f;
         int g1flag = 0;
         int g2flag = 0;
@@ -398,6 +408,7 @@ public class client {
                         store[counter+1] = args[counter + 1];
                         f = new File(store[counter+1]);
                         if(!f.exists() || f.isDirectory()) {
+							setTextToLabel("Input valid file for g1.");
                             System.out.println("Input valid file for g1.");
                             breakflag = 1;
                         } else {
@@ -405,6 +416,7 @@ public class client {
                             g1file = store[counter+1];
                         }
                     } else {
+						setTextToLabel("Input valid file for g1.");
                         System.out.println("Input valid file for g1.");
                         breakflag = 1;
                         break;
@@ -415,6 +427,7 @@ public class client {
                         store[counter+1] = args[counter + 1];
                         f = new File(store[counter+1]);
                         if(!f.exists() || f.isDirectory()) {
+							setTextToLabel("Input valid file for g2.");
                             System.out.println("Input valid file for g2.");
                             breakflag = 1;
                         } else {
@@ -422,6 +435,7 @@ public class client {
                             g2file = store[counter+1];
                         }
                     } else {
+						setTextToLabel("Input valid file for g2.");
                         System.out.println("Input valid file for g2.");
                         breakflag = 1;
                         break;
@@ -432,6 +446,7 @@ public class client {
                         store[counter+1] = args[counter + 1];
                         f = new File(store[counter+1]);
                         if(!f.exists() || f.isDirectory()) {
+							setTextToLabel("Input valid file for s.");
                             System.out.println("Input valid file for s.");
                             breakflag = 1;
                         } else {
@@ -439,6 +454,7 @@ public class client {
                             sfile = store[counter+1];
                         }
                     } else {
+						setTextToLabel("Input valid file for s.");
                         System.out.println("Input valid file for s.");
                         breakflag = 1;
                         break;
@@ -449,6 +465,7 @@ public class client {
                         store[counter+1] = args[counter + 1];
                         f = new File(store[counter+1]);
                         if(!f.exists() || f.isDirectory()) {
+							setTextToLabel("Input valid file for i.");
                             System.out.println("Input valid file for i.");
                             breakflag = 1;
                         } else {
@@ -456,6 +473,7 @@ public class client {
                             ifile = store[counter+1];
                         }
                     } else {
+						setTextToLabel("Input valid file for i.");
                         System.out.println("Input valid file for i.");
                         breakflag = 1;
                         break;
@@ -492,7 +510,7 @@ public class client {
                             g1matrixcopy[c][c2] = g1matrix[c][c2];
                         }
                     }
-                    
+
                     File file2 = new File(sfile);
                     if (!file2.exists()) {
                         file2.createNewFile();
@@ -509,7 +527,7 @@ public class client {
                         bw2.write("\n");
                     }
                     bw2.close();
-                    
+
                     File file3 = new File(g2file);
                     if (!file3.exists()) {
                         file3.createNewFile();
@@ -526,7 +544,7 @@ public class client {
                         bw3.write("\n");
                     }
                     bw3.close();
-                    
+
                     File file4 = new File(ifile);
                     if (!file4.exists()) {
                         file4.createNewFile();
@@ -544,13 +562,15 @@ public class client {
                     bw4.close();
                 }
                 catch (IOException e) {
+					setTextToLabel(e.toString());
                     System.out.println(e);
                 }
             } else {
+				setTextToLabel("Files needed");
                 System.out.println("Files needed");
                 System.exit(0);
             }
-            
+
         } else {
             try {
                 File file = new File(g1file);
@@ -571,7 +591,7 @@ public class client {
                     bw.write("\n");
                 }
                 bw.close();
-                
+
                 File file2 = new File(sfile);
                 if (!file2.exists()) {
                     file2.createNewFile();
@@ -588,7 +608,7 @@ public class client {
                     bw2.write("\n");
                 }
                 bw2.close();
-                
+
                 File file3 = new File(g2file);
                 if (!file3.exists()) {
                     file3.createNewFile();
@@ -605,7 +625,7 @@ public class client {
                     bw3.write("\n");
                 }
                 bw3.close();
-                
+
                 File file4 = new File(ifile);
                 if (!file4.exists()) {
                     file4.createNewFile();
@@ -623,6 +643,7 @@ public class client {
                 bw4.close();
             }
             catch (IOException e) {
+				setTextToLabel(e.toString());
                 System.out.println(e);
             }
         }
@@ -652,7 +673,7 @@ public class client {
                     matrixcopy[counter][counter2] = matrix[counter][counter2];
                 }
             }
-            
+
             x = 0;
             y = 0;
             String matrix2[][] = new String[1100][1100];
@@ -675,7 +696,7 @@ public class client {
                     matrixcopy2[counter][counter2] = matrix2[counter][counter2];
                 }
             }
-            
+
             /*x = 0;
              y = 0;
              String matrix3[][] = new String[1100][1100];
@@ -698,7 +719,6 @@ public class client {
              matrixcopy3[counter][counter2] = matrix3[counter][counter2];
              }
              }*/
-            
             out = new ObjectOutputStream(MyClient.getOutputStream());
             out.writeObject(matrixcopy);
             //out.flush();
@@ -751,6 +771,7 @@ public class client {
                 //outmG3.flush();
                 if(Integer.parseInt(String.valueOf((char)num)) == 0) {
                     System.out.println("Run #" + runnum);
+					setTextToLabel("Run #" + runnum + ": alpha and Q requested");
                     runnum++;
                     Object[] alphaQ = {isofunc2,g3matrix,list1,list2};
                     System.out.println("alpha and Q requested");
@@ -759,6 +780,7 @@ public class client {
                     //out3.flush();
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 1) {
                     System.out.println("Run #" + runnum);
+					setTextToLabel("Run #" + runnum + ": pi and subgraph Q' requested");
                     runnum++;
                     Object[] piQprime = {pi,g3primematrix,list1,list2};
                     System.out.println("pi and subgraph Q' requested");
@@ -773,9 +795,9 @@ public class client {
             out.close();
         }
         catch (IOException e) {
+			setTextToLabel(e.toString());
             System.out.println(e);
         }
-        
         System.exit(0);
     }
 }
