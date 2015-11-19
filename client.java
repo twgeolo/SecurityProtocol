@@ -134,6 +134,10 @@ public class client {
     private static int rb = 0;
     private static String[] isofunc;
     private static String[] isofunc2;
+    private static ObjectOutputStream out;
+    
+    
+    
     public static String[][] createMatrix(int size) {
         String matrix[][] = new String[size][size];
         for(int counter = 0; counter < size; counter++) {
@@ -511,6 +515,7 @@ public class client {
                         }
                     }
 
+                    System.out.println("Making G2'");
                     File file2 = new File(sfile);
                     if (!file2.exists()) {
                         file2.createNewFile();
@@ -528,6 +533,7 @@ public class client {
                     }
                     bw2.close();
 
+                    System.out.println("Making G2");
                     File file3 = new File(g2file);
                     if (!file3.exists()) {
                         file3.createNewFile();
@@ -545,6 +551,7 @@ public class client {
                     }
                     bw3.close();
 
+                    System.out.println("Making phi");
                     File file4 = new File(ifile);
                     if (!file4.exists()) {
                         file4.createNewFile();
@@ -573,6 +580,7 @@ public class client {
 
         } else {
             try {
+                System.out.println("Making G1");
                 File file = new File(g1file);
                 if (!file.exists()) {
                     file.createNewFile();
@@ -591,7 +599,8 @@ public class client {
                     bw.write("\n");
                 }
                 bw.close();
-
+                
+                System.out.println("Making G2'");
                 File file2 = new File(sfile);
                 if (!file2.exists()) {
                     file2.createNewFile();
@@ -608,7 +617,8 @@ public class client {
                     bw2.write("\n");
                 }
                 bw2.close();
-
+                
+                System.out.println("Making G2");
                 File file3 = new File(g2file);
                 if (!file3.exists()) {
                     file3.createNewFile();
@@ -626,6 +636,7 @@ public class client {
                 }
                 bw3.close();
 
+                System.out.println("Making phi");
                 File file4 = new File(ifile);
                 if (!file4.exists()) {
                     file4.createNewFile();
@@ -696,63 +707,12 @@ public class client {
                     matrixcopy2[counter][counter2] = matrix2[counter][counter2];
                 }
             }
-
-            /*x = 0;
-             y = 0;
-             String matrix3[][] = new String[1100][1100];
-             FileInputStream inputStream3 = new FileInputStream(g2file);
-             while (inputStream3.available() > 0) {
-             current = (char) inputStream3.read();
-             if(current == '\n') {
-             x++;
-             y = 0;
-             continue;
-             } else if(current == ' ') {
-             continue;
-             }
-             matrix3[x][y] = String.valueOf(current);
-             y++;
-             }
-             String matrixcopy3[][] = new String[x][x];
-             for(int counter = 0; counter < x; counter++) {
-             for(int counter2 = 0; counter2 < x; counter2++) {
-             matrixcopy3[counter][counter2] = matrix3[counter][counter2];
-             }
-             }*/
             out = new ObjectOutputStream(MyClient.getOutputStream());
             out.writeObject(matrixcopy);
-            //out.flush();
-            //out.reset();
-            //out2 = new ObjectOutputStream(MyClient.getOutputStream());
             out.writeObject(matrixcopy2);
-            //out2.flush();
-            //out2.reset();
-            /*ObjectOutputStream out3 = new ObjectOutputStream(MyClient.getOutputStream());
-             out3.writeObject(matrixcopy3);*/
-            /*for(int counter = 0; counter < matrixcopy.length; counter++) {
-             for(int counter2 = 0; counter2 < matrixcopy.length; counter2++) {
-             System.out.print(matrixcopy[counter][counter2] + " ");
-             }
-             System.out.println();
-             }
-             System.out.println();
-             for(int counter = 0; counter < matrixcopy2.length; counter++) {
-             for(int counter2 = 0; counter2 < matrixcopy2.length; counter2++) {
-             System.out.print(matrixcopy2[counter][counter2] + " ");
-             }
-             System.out.println();
-             }
-             System.out.println();*/
             int num;
             int runnum = 1;
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(MyClient.getInputStream()));
-            /*out.close();
-            out2.close();
-            outmG3 = new ObjectOutputStream(MyClient.getOutputStream());
-            out3 = new ObjectOutputStream(MyClient.getOutputStream());
-            out4 = new ObjectOutputStream(MyClient.getOutputStream());
-            out5 = new ObjectOutputStream(MyClient.getOutputStream());
-            out6 = new ObjectOutputStream(MyClient.getOutputStream());*/
             while((num = stdIn.read()) != -1) {
                 String g3matrix[][] = new String[matrixcopy2.length][matrixcopy2.length];
                 g3matrix = isomorphism(matrixcopy2, 1);
@@ -766,33 +726,30 @@ public class client {
                 String list1[][] = getRandMatrix(g3matrix.length, list1maxvalue);
                 String list2[][] = getRandMatrix(g3matrix.length, list2maxvalue);
                 String[][] modifiedG3 = bitCommit_HASH_SHA2_list(list1, list2, g3matrix);
-                //outmG3 = new ObjectOutputStream(MyClient.getOutputStream());
-                out.writeObject(modifiedG3);
-                //outmG3.flush();
-                if(Integer.parseInt(String.valueOf((char)num)) == 0) {
+                if(Integer.parseInt(String.valueOf((char)num)) != 2) {
                     System.out.println("Run #" + runnum);
+                    out.writeObject(modifiedG3);
+                    System.out.println("Commitment sent");
+                }
+                if(Integer.parseInt(String.valueOf((char)num)) == 0) {
 					setTextToLabel("Run #" + runnum + ": alpha and Q requested");
                     runnum++;
                     Object[] alphaQ = {isofunc2,g3matrix,list1,list2};
                     System.out.println("alpha and Q requested");
-                    //out3 = new ObjectOutputStream(MyClient.getOutputStream());
                     out.writeObject(alphaQ);
-                    //out3.flush();
+                    System.out.println("alpha and Q sent");
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 1) {
-                    System.out.println("Run #" + runnum);
 					setTextToLabel("Run #" + runnum + ": pi and subgraph Q' requested");
                     runnum++;
                     Object[] piQprime = {pi,g3primematrix,list1,list2};
                     System.out.println("pi and subgraph Q' requested");
-                    //out4 = new ObjectOutputStream(MyClient.getOutputStream());
                     out.writeObject(piQprime);
-                    //out4.flush();
+                    System.out.println("pi and subgraph Q' sent");
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 2) {
                     break;
                 }
                 out.flush();
             }
-            out.close();
         }
         catch (IOException e) {
 			setTextToLabel(e.toString());
