@@ -14,10 +14,11 @@ import java.net.*;
 
 public class server {
 	
-	JScrollPane history;
-	HistoryEntry[] entries;
+	static JScrollPane history;
+	static JLabel chatLabel;
+	static HistoryEntry[] entries;
 	
-	public server() {
+	public static void setupUI() {
     	JFrame mainFrame = new JFrame("Server UI");
 
 		// History Bar
@@ -66,7 +67,7 @@ public class server {
 		
 		// Victor chat box
 		
-		JLabel chatLabel = new JLabel("Let's begin", JLabel.CENTER);
+		chatLabel = new JLabel("Let's begin", JLabel.CENTER);
 		font = new Font("Helvetica Neue", Font.PLAIN, 15);
 		chatLabel.setFont(font);
 		chatLabel.setForeground(Color.black);
@@ -104,7 +105,8 @@ public class server {
 	}
 	
     public static void main (String[] args) {
-		new server();
+		setupUI();
+		
         int runtimes = (int)(Math.random()*11+5);  //5 to 15 times
         int flag = 0, flag2 = 0;
         try {
@@ -149,6 +151,7 @@ public class server {
                             int value = (int)(Math.random()*2);
                             writer.write(String.valueOf(value));
                             writer.flush();
+							chatLabel.setText("Run #" + runnum + ": Waiting for commitment");
                             System.out.println("Waiting for commitment");
                             ObjectInputStream inputmG3 = new ObjectInputStream(socket.getInputStream());
                             String[][] modifiedG3 = (String[][])inputmG3.readObject();
@@ -159,8 +162,10 @@ public class server {
                                 System.out.println();
                             }
                             if(value == 0) {
+								chatLabel.setText("Run #" + runnum + ": Requesting for alpha and Q");
                                 System.out.println("Requesting for alpha and Q");
                             } else if(value == 1) {
+								chatLabel.setText("Run #" + runnum + ": Requesting for pi and subgraph Q'");
                                 System.out.println("Requesting for pi and subgraph Q'");
                             }
                             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
