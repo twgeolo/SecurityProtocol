@@ -152,12 +152,12 @@ public class server {
                             System.out.println("Waiting for commitment");
                             ObjectInputStream inputmG3 = new ObjectInputStream(socket.getInputStream());
                             String[][] modifiedG3 = (String[][])inputmG3.readObject();
-                            for(int counter = 0; counter < modifiedG3.length; counter++) {
+                            /*for(int counter = 0; counter < modifiedG3.length; counter++) {
                                 for(int counter2 = 0; counter2 < modifiedG3.length; counter2++) {
                                     System.out.print(modifiedG3[counter][counter2] + " ");
                                 }
                                 System.out.println();
-                            }
+                            }*/
                             if(value == 0) {
                                 System.out.println("Requesting for alpha and Q");
                             } else if(value == 1) {
@@ -166,14 +166,14 @@ public class server {
                             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                             if(value == 0) {
                                 ObjectInputStream input3 = new ObjectInputStream(socket.getInputStream());
-                                String[] alpha = (String[])input.readObject();
+                                String[] alpha = (String[])input3.readObject();
                                 ObjectInputStream input4 = new ObjectInputStream(socket.getInputStream());
-                                String[][] g3matrix = (String[][])input.readObject();
+                                String[][] g3matrix = (String[][])input4.readObject();
                             } else if(value == 1) {
                                 ObjectInputStream input3 = new ObjectInputStream(socket.getInputStream());
-                                String[] pi = (String[])input.readObject();
+                                String[] pi = (String[])input3.readObject();
                                 ObjectInputStream input4 = new ObjectInputStream(socket.getInputStream());
-                                String[][] g3primematrix = (String[][])input.readObject();
+                                String[][] g3primematrix = (String[][])input4.readObject();
                             }
                             flag++;
                         }
