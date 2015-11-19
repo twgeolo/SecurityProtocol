@@ -109,13 +109,6 @@ public class client {
     	mainFrame.setVisible(true);
 	}
 	
-	private ImageIcon getImage(String path) {
-	    URL url = getClass().getResource(path);
-	    if (url != null)
-	        return new ImageIcon(url);
-	    return null;
-	}
-	
     private static int tl = 0;
     private static int rb = 0;
     private static String[] isofunc;

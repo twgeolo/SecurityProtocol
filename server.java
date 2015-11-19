@@ -14,6 +14,9 @@ import java.net.*;
 
 public class server {
 	
+	JScrollPane history;
+	HistoryEntry[] entries;
+	
 	public server() {
     	JFrame mainFrame = new JFrame("Server UI");
 
@@ -29,22 +32,12 @@ public class server {
 		
 		// History List
 
-		HistoryEntry[] entries = {
-		      new HistoryEntry("Requesting 1", "Past.png"),
-		      new HistoryEntry("Requesting 2", "Past.png"),
-		      new HistoryEntry("Requesting 3", "Past.png"),
-		      new HistoryEntry("Requesting 4", "Past.png"),
-		      new HistoryEntry("Requesting 5", "Past.png"),
-		      new HistoryEntry("Requesting 6", "Past.png"),
-		      new HistoryEntry("Requesting 7", "Past.png"),
-		      new HistoryEntry("Requesting 8", "Past.png"),
-		      new HistoryEntry("Requesting 9", "Past.png")
-		};
+		entries = new HistoryEntry[] {};
     	JList<HistoryEntry> list = new JList<HistoryEntry>(entries);
 		font = new Font("Helvetica Neue", Font.PLAIN, 15);
     	list.setFont(font);
     	list.setCellRenderer(new HistoryCellRenderer());
-    	JScrollPane history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    	history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		history.setBorder(BorderFactory.createEmptyBorder());
 		
 		// Main
@@ -104,13 +97,10 @@ public class server {
     	mainFrame.setSize(768,576);
     	mainFrame.setLayout(null);
     	mainFrame.setVisible(true);
-	}
-	
-	private ImageIcon getImage(String path) {
-	    URL url = getClass().getResource(path);
-	    if (url != null)
-	        return new ImageIcon(url);
-	    return null;
+
+//		list.setListData( newdata );
+//      	contact.revalidate();
+//      	contact.repaint();
 	}
 	
     public static void main (String[] args) {
