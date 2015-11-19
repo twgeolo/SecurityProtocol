@@ -4,9 +4,117 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.net.*;
 
 public class server {
+	
+	public server() {
+    	JFrame mainFrame = new JFrame("Server UI");
+
+		// History Bar
+
+    	JLabel historyBar = new JLabel("History", JLabel.CENTER);
+		Font font = new Font("Helvetica Neue", Font.BOLD, 18);
+    	historyBar.setFont(font);
+    	historyBar.setForeground(Color.black);
+    	historyBar.setBackground(Color.white);
+    	historyBar.setOpaque(true);
+		historyBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+		
+		// History List
+
+		HistoryEntry[] entries = {
+		      new HistoryEntry("Requesting 1", "Past.png"),
+		      new HistoryEntry("Requesting 2", "Past.png"),
+		      new HistoryEntry("Requesting 3", "Past.png"),
+		      new HistoryEntry("Requesting 4", "Past.png"),
+		      new HistoryEntry("Requesting 5", "Past.png"),
+		      new HistoryEntry("Requesting 6", "Past.png"),
+		      new HistoryEntry("Requesting 7", "Past.png"),
+		      new HistoryEntry("Requesting 8", "Past.png"),
+		      new HistoryEntry("Requesting 9", "Past.png")
+		};
+    	JList<HistoryEntry> list = new JList<HistoryEntry>(entries);
+		font = new Font("Helvetica Neue", Font.PLAIN, 15);
+    	list.setFont(font);
+    	list.setCellRenderer(new HistoryCellRenderer());
+    	JScrollPane history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		history.setBorder(BorderFactory.createEmptyBorder());
+		
+		// Main
+
+    	JLabel mainBar = new JLabel("Main", JLabel.CENTER);
+		font = new Font("Helvetica Neue", Font.BOLD, 18);
+    	mainBar.setFont(font);
+    	mainBar.setForeground(Color.black);
+    	mainBar.setBackground(Color.white);
+    	mainBar.setOpaque(true);
+		mainBar.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 0, Color.gray));
+		
+		// Victor image
+		
+		ImagePanel victorPanel = new ImagePanel("Victor.png");
+		victorPanel.setBackground(Color.white);
+		
+		// Victor label
+		
+		JLabel victorLabel = new JLabel("Victor", JLabel.CENTER);
+		font = new Font("Helvetica Neue", Font.BOLD, 20);
+		victorLabel.setFont(font);
+		victorLabel.setForeground(Color.black);
+		victorLabel.setBackground(Color.white);
+		victorLabel.setOpaque(true);
+		
+		// Victor chat box
+		
+		JLabel chatLabel = new JLabel("Let's begin", JLabel.CENTER);
+		font = new Font("Helvetica Neue", Font.PLAIN, 15);
+		chatLabel.setFont(font);
+		chatLabel.setForeground(Color.black);
+		chatLabel.setBackground(Color.white);
+		chatLabel.setBorder(new RoundedBorder(Color.BLACK, 20));
+		chatLabel.setOpaque(true);
+		
+		// Set the bounds
+		
+    	historyBar.setBounds(0, 0, 240, 33);
+    	history.setBounds(0, 33, 240, 522);
+    	mainBar.setBounds(240, 0, 528, 33);
+		victorPanel.setBounds(454, 288, 100, 100);
+		victorLabel.setBounds(454, 388, 100, 30);
+		chatLabel.setBounds(354, 138, 300, 100);
+		
+		// Add the subviews
+		
+		mainFrame.getContentPane().add(historyBar);
+		mainFrame.getContentPane().add(history);
+		mainFrame.getContentPane().add(mainBar);
+		mainFrame.getContentPane().add(victorPanel);
+		mainFrame.getContentPane().add(victorLabel);
+		mainFrame.getContentPane().add(chatLabel);
+		
+		mainFrame.getContentPane().setBackground(Color.white);
+    	mainFrame.setResizable(false);
+    	mainFrame.setSize(768,576);
+    	mainFrame.setLayout(null);
+    	mainFrame.setVisible(true);
+	}
+	
+	private ImageIcon getImage(String path) {
+	    URL url = getClass().getResource(path);
+	    if (url != null)
+	        return new ImageIcon(url);
+	    return null;
+	}
+	
     public static void main (String[] args) {
+		new server();
         int runtimes = (int)(Math.random()*11+5);  //5 to 15 times
         int flag = 0, flag2 = 0;
         try {
