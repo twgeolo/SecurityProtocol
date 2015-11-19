@@ -111,6 +111,7 @@ public class client {
 		mainFrame.getContentPane().add(chatLabel);
 
 		mainFrame.getContentPane().setBackground(Color.white);
+		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     	mainFrame.setResizable(false);
     	mainFrame.setSize(768,576);
     	mainFrame.setLayout(null);
@@ -761,8 +762,8 @@ public class client {
                 outmG3.flush();
                 if(Integer.parseInt(String.valueOf((char)num)) == 0) {
                     System.out.println("Run #" + runnum);
-                    runnum++;
 					setTextToLabel("Run #" + runnum + ": alpha and Q requested");
+                    runnum++;
                     System.out.println("alpha and Q requested");
                     /*for(int counter = 0; counter < modifiedG3.length; counter++) {
                         for(int counter2 = 0; counter2 < modifiedG3.length; counter2++) {
@@ -778,8 +779,8 @@ public class client {
                     out6.flush();
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 1) {
                     System.out.println("Run #" + runnum);
-                    runnum++;
 					setTextToLabel("Run #" + runnum + ": pi and subgraph Q' requested");
+                    runnum++;
                     System.out.println("pi and subgraph Q' requested");
                     /*for(int counter = 0; counter < modifiedG3.length; counter++) {
                         for(int counter2 = 0; counter2 < modifiedG3.length; counter2++) {

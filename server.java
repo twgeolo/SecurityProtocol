@@ -103,6 +103,7 @@ public class server {
 		mainFrame.getContentPane().add(chatLabel);
 
 		mainFrame.getContentPane().setBackground(Color.white);
+		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     	mainFrame.setResizable(false);
     	mainFrame.setSize(768,576);
     	mainFrame.setLayout(null);
