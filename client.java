@@ -139,6 +139,7 @@ public class client {
     
     
     public static String[][] createMatrix(int size) {
+        size = 5;
         String matrix[][] = new String[size][size];
         for(int counter = 0; counter < size; counter++) {
             for(int counter2 = 0; counter2 < size; counter2++) {
@@ -366,17 +367,112 @@ public class client {
 
     public static String[][] subgraph(String[][] supergraph) {
         int rowLen = supergraph.length - tl - rb;
-        String subgraph[][] = new String[rowLen][rowLen];
-        int a = 0, b = 0;
-        for(int counter = tl; counter < supergraph.length-rb; counter++) {
-            b = 0;
-            for(int counter2 = tl; counter2 < supergraph.length-rb; counter2++) {
-                subgraph[a][b] = supergraph[counter][counter2];
-                b++;
+        String matrixOne[][] = new String[supergraph.length][supergraph.length];
+        int a = 0;
+        for(int counter = 0; counter < supergraph.length; counter++) {
+            a = 0;
+            for(int counter2 = 0; counter2 < supergraph.length; counter2++) {
+                if(Integer.parseInt(supergraph[counter][counter2]) == 1) {
+                    matrixOne[counter][a] = String.valueOf(counter2);
+                    a++;
+                }
             }
-            a++;
         }
-        return subgraph;
+        String todelete[] = new String[rowLen];
+        for(int counter = 0; counter < tl; counter++) {
+            todelete[counter] = isofunc2[counter];
+        }
+        int tdcounter = 0;
+        for(int counter = supergraph.length-rb; counter < supergraph.length; counter++) {
+            todelete[tl+tdcounter] = isofunc2[counter];
+            tdcounter++;
+        }
+        a = 0;
+        int continueflag = 0, i = 0;
+        String subgraph[][] = new String[supergraph.length][supergraph.length];
+        for(int counter = 0; counter < supergraph.length; counter++) {
+            a = 0;
+            i = 0;
+            while(a < todelete.length) {
+                if(todelete[a] == null) {
+                    break;
+                }
+                if(counter == Integer.parseInt(todelete[a])) {
+                    continueflag = 1;
+                    break;
+                }
+                a++;
+            }
+            a = 0;
+            if(continueflag == 1) {
+                continueflag = 0;
+                continue;
+            }
+            for(int counter2 = 0; counter2 < supergraph.length; counter2++) {
+                if(matrixOne[counter][counter2] == null) {
+                    break;
+                }
+                while(a < todelete.length) {
+                    if(todelete[a] == null) {
+                        break;
+                    }
+                    if(Integer.parseInt(matrixOne[counter][counter2]) == Integer.parseInt(todelete[a])) {
+                        continueflag = 1;
+                        break;
+                    }
+                    a++;
+                }
+                a = 0;
+                if(continueflag == 1) {
+                    continueflag = 0;
+                    continue;
+                }
+                subgraph[counter][i] = matrixOne[counter][counter2];
+                i++;
+            }
+        }
+        /*for(int counter = 0; counter < supergraph.length; counter++) {
+            for(int counter2 = 0; counter2 < supergraph.length; counter2++) {
+                System.out.print(subgraph[counter][counter2] + " ");
+            }
+            System.out.println();
+        }*/
+        int edge = 0;
+        String qprime[][] = new String[supergraph.length][supergraph.length];
+        for(int counter = 0; counter < supergraph.length; counter++) {
+                for(int counter2 = 0; counter2 < supergraph.length; counter2++) {
+                    qprime[counter][counter2] = String.valueOf(-1);
+                }
+        }
+        int edgeplus = 0;
+        String store[] = new String[supergraph.length];
+        for(int counter = 0; counter < supergraph.length; counter++) {
+            for(int counter2 = 0; counter2 < supergraph.length; counter2++) {
+                if(subgraph[counter][counter2] == null) {
+                    break;
+                } else {
+                    edgeplus = 1;
+                }
+                qprime[counter][Integer.parseInt(subgraph[counter][counter2])] = String.valueOf(1);
+                store[edge] = String.valueOf(counter);
+            }
+            if(edgeplus == 1) {
+                edge++;
+                edgeplus = 0;
+            }
+        }
+        
+        for(int counter = 0; counter < store.length; counter++) {
+            for(int counter2 = 0; counter2 < store.length; counter2++) {
+                if(store[counter] == null || store[counter2] == null) {
+                    break;
+                }
+                if(Integer.parseInt(qprime[Integer.parseInt(store[counter])][Integer.parseInt(store[counter2])]) == -1) {
+                    qprime[Integer.parseInt(store[counter])][Integer.parseInt(store[counter2])] = String.valueOf(0);
+                }
+            }
+        }
+        return qprime;
     }
 
     public static String[] generatepi(String[] iso1, String[] iso2, int top, int bot) {
@@ -732,19 +828,19 @@ public class client {
                     System.out.println("Commitment sent");
                 }
                 if(Integer.parseInt(String.valueOf((char)num)) == 0) {
-					setTextToLabel("Run #" + runnum + ": alpha and Q requested");
+					setTextToLabel("Run #" + runnum + ": Request for alpha and Q received");
                     runnum++;
                     Object[] alphaQ = {isofunc2,g3matrix,list1,list2};
-                    System.out.println("alpha and Q requested");
+                    System.out.println("Request for alpha and Q received");
                     out.writeObject(alphaQ);
-                    System.out.println("alpha and Q sent");
+                    System.out.println("Sent alpha and Q");
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 1) {
-					setTextToLabel("Run #" + runnum + ": pi and subgraph Q' requested");
+					setTextToLabel("Run #" + runnum + ": Request for pi and subgraph Q' received");
                     runnum++;
                     Object[] piQprime = {pi,g3primematrix,list1,list2};
-                    System.out.println("pi and subgraph Q' requested");
+                    System.out.println("Request for pi and subgraph Q' received");
                     out.writeObject(piQprime);
-                    System.out.println("pi and subgraph Q' sent");
+                    System.out.println("Sent pi and subgraph Q'");
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 2) {
                     break;
                 }

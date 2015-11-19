@@ -125,9 +125,7 @@ public class server {
     public static boolean matrixEqual(String[][] array1, String[][] array2) {
         for(int counter = 0; counter < array1.length; counter++) {
             for(int counter2 = 0; counter2 < array1.length; counter2++) {
-                //System.out.print(array1[counter][counter2] + "///" +array2[counter][counter2] + " ");
                 if(Integer.parseInt(array1[counter][counter2]) != Integer.parseInt(array2[counter][counter2])) {
-                    //System.out.println("HERE");
                     return false;
                 }
             }
@@ -170,6 +168,64 @@ public class server {
         return newMatrix;
     }
     
+    public static String[][] validatePi(String[][] matrix, String[] isofunc, int length) {
+        String matrixOne[][] = new String[length][length];
+        int a = 0;
+        for(int counter = 0; counter < matrix.length; counter++) {
+            a = 0;
+            for(int counter2 = 0; counter2 < matrix.length; counter2++) {
+                if(Integer.parseInt(matrix[counter][counter2]) == 1) {
+                    matrixOne[counter][a] = String.valueOf(counter2);
+                    a++;
+                }
+            }
+        }
+        String copy[][] = new String[length][length];
+        for(int counter = 0; counter < isofunc.length; counter++) {
+            for(int counter2 = 0; counter2 < length; counter2++) {
+                if(matrixOne[counter][counter2] == null) {
+                    break;
+                }
+                copy[counter][counter2] = isofunc[Integer.parseInt(matrixOne[counter][counter2])];
+            }
+        }
+        int edge = 0;
+        String qprime[][] = new String[length][length];
+        for(int counter = 0; counter < length; counter++) {
+            for(int counter2 = 0; counter2 < length; counter2++) {
+                qprime[counter][counter2] = String.valueOf(-1);
+            }
+        }
+        int edgeplus = 0;
+        String store[] = new String[length];
+        for(int counter = 0; counter < isofunc.length; counter++) {
+            for(int counter2 = 0; counter2 < length; counter2++) {
+                if(copy[counter][counter2] == null) {
+                    break;
+                } else {
+                    edgeplus = 1;
+                }
+                qprime[Integer.parseInt(isofunc[counter])][Integer.parseInt(copy[counter][counter2])] = String.valueOf(1);
+                store[edge] = copy[counter][counter2];
+            }
+            if(edgeplus == 1) {
+                edge++;
+                edgeplus = 0;
+            }
+        }
+        
+        for(int counter = 0; counter < isofunc.length; counter++) {
+            for(int counter2 = 0; counter2 < isofunc.length; counter2++) {
+                if(isofunc[counter] == null || isofunc[counter2] == null) {
+                    break;
+                }
+                if(Integer.parseInt(qprime[Integer.parseInt(isofunc[counter])][Integer.parseInt(isofunc[counter2])]) == -1) {
+                    qprime[Integer.parseInt(isofunc[counter])][Integer.parseInt(isofunc[counter2])] = String.valueOf(0);
+                }
+            }
+        }
+        return qprime;
+    }
     
     public static void main (String[] args) {
         setupUI();
@@ -208,10 +264,10 @@ public class server {
                             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                             if(value == 0) {
                                 Object[] alphaQ = (Object[])input.readObject();
-                                String[] pi = (String[])alphaQ[0];
+                                String[] alpha = (String[])alphaQ[0];
                                 String[][] g3matrix = (String[][])alphaQ[1];
                                 System.out.println("Received alpha and Q");
-                                String[][] maybeG3 = validateAlpha(g2matrix,pi);
+                                String[][] maybeG3 = validateAlpha(g2matrix,alpha);
                                 System.out.println("Calculating Q using G2 and alpha");
                                 boolean check = matrixEqual(g3matrix,maybeG3);
                                 if(check == true) {
@@ -221,7 +277,16 @@ public class server {
                                 }
                             } else if(value == 1) {
                                 Object[] piQprime = (Object[])input.readObject();
+                                String[] pi = (String[])piQprime[0];
+                                String[][] g3primematrix = (String[][])piQprime[1];
                                 System.out.println("Received pi and subgraph Q'");
+                                String[][] maybeG3prime = validatePi(g1matrix,pi,g2matrix.length);
+                                boolean check = matrixEqual(maybeG3prime,g3primematrix);
+                                if(check == true) {
+                                    System.out.println("Calculated Q' is the same as received Q'");
+                                } else {
+                                    System.out.println("Calculated Q is the same as received Q'");
+                                }
                             }
                             flag++;
                         }
