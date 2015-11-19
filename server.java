@@ -123,8 +123,8 @@ public class server {
                          }
                          System.out.println();*/
                         
-                        ObjectInputStream input2 = new ObjectInputStream(socket.getInputStream());
-                        String[][] g2matrix = (String[][])input2.readObject();
+                        //ObjectInputStream input2 = new ObjectInputStream(socket.getInputStream());
+                        String[][] g2matrix = (String[][])input.readObject();
                         /*for(int counter = 0; counter < g2matrix.length; counter++) {
                          for(int counter2 = 0; counter2 < g2matrix[0].length; counter2++) {
                          System.out.print(g2matrix[counter][counter2] + " ");
@@ -150,14 +150,8 @@ public class server {
                             writer.write(String.valueOf(value));
                             writer.flush();
                             System.out.println("Waiting for commitment");
-                            ObjectInputStream inputmG3 = new ObjectInputStream(socket.getInputStream());
-                            String[][] modifiedG3 = (String[][])inputmG3.readObject();
-                            /*for(int counter = 0; counter < modifiedG3.length; counter++) {
-                                for(int counter2 = 0; counter2 < modifiedG3.length; counter2++) {
-                                    System.out.print(modifiedG3[counter][counter2] + " ");
-                                }
-                                System.out.println();
-                            }*/
+                            //ObjectInputStream inputmG3 = new ObjectInputStream(socket.getInputStream());
+                            String[][] modifiedG3 = (String[][])input.readObject();
                             if(value == 0) {
                                 System.out.println("Requesting for alpha and Q");
                             } else if(value == 1) {
@@ -165,15 +159,16 @@ public class server {
                             }
                             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                             if(value == 0) {
-                                ObjectInputStream input3 = new ObjectInputStream(socket.getInputStream());
-                                String[] alpha = (String[])input3.readObject();
-                                ObjectInputStream input4 = new ObjectInputStream(socket.getInputStream());
-                                String[][] g3matrix = (String[][])input4.readObject();
+                                //ObjectInputStream input3 = new ObjectInputStream(socket.getInputStream());
+                                Object[] alphaQ = (Object[])input.readObject();
+                                //String[] alpha = (String[])input3.readObject();
+                                //ObjectInputStream input4 = new ObjectInputStream(socket.getInputStream());
+                                //String[][] g3matrix = (String[][])input4.readObject();
                             } else if(value == 1) {
-                                ObjectInputStream input3 = new ObjectInputStream(socket.getInputStream());
-                                String[] pi = (String[])input3.readObject();
-                                ObjectInputStream input4 = new ObjectInputStream(socket.getInputStream());
-                                String[][] g3primematrix = (String[][])input4.readObject();
+                                //ObjectInputStream input3 = new ObjectInputStream(socket.getInputStream());
+                                Object[] piQprime = (Object[])input.readObject();
+                                //ObjectInputStream input4 = new ObjectInputStream(socket.getInputStream());
+                                //String[][] g3primematrix = (String[][])input4.readObject();
                             }
                             flag++;
                         }

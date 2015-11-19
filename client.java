@@ -118,6 +118,11 @@ public class client {
     private static int rb = 0;
     private static String[] isofunc;
     private static String[] isofunc2;
+    private static ObjectOutputStream out;
+    private static ObjectOutputStream out2;
+    private static ObjectOutputStream out3;
+    private static ObjectOutputStream out4;
+    private static ObjectOutputStream outmG3;
     
     public static String[][] createMatrix(int size) {
         String matrix[][] = new String[size][size];
@@ -694,10 +699,14 @@ public class client {
              }
              }*/
             
-            ObjectOutputStream out = new ObjectOutputStream(MyClient.getOutputStream());
+            out = new ObjectOutputStream(MyClient.getOutputStream());
             out.writeObject(matrixcopy);
-            ObjectOutputStream out2 = new ObjectOutputStream(MyClient.getOutputStream());
-            out2.writeObject(matrixcopy2);
+            //out.flush();
+            //out.reset();
+            //out2 = new ObjectOutputStream(MyClient.getOutputStream());
+            out.writeObject(matrixcopy2);
+            //out2.flush();
+            //out2.reset();
             /*ObjectOutputStream out3 = new ObjectOutputStream(MyClient.getOutputStream());
              out3.writeObject(matrixcopy3);*/
             /*for(int counter = 0; counter < matrixcopy.length; counter++) {
@@ -717,6 +726,13 @@ public class client {
             int num;
             int runnum = 1;
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(MyClient.getInputStream()));
+            /*out.close();
+            out2.close();
+            outmG3 = new ObjectOutputStream(MyClient.getOutputStream());
+            out3 = new ObjectOutputStream(MyClient.getOutputStream());
+            out4 = new ObjectOutputStream(MyClient.getOutputStream());
+            out5 = new ObjectOutputStream(MyClient.getOutputStream());
+            out6 = new ObjectOutputStream(MyClient.getOutputStream());*/
             while((num = stdIn.read()) != -1) {
                 String g3matrix[][] = new String[matrixcopy2.length][matrixcopy2.length];
                 g3matrix = isomorphism(matrixcopy2, 1);
@@ -730,50 +746,36 @@ public class client {
                 String list1[][] = getRandMatrix(g3matrix.length, list1maxvalue);
                 String list2[][] = getRandMatrix(g3matrix.length, list2maxvalue);
                 String[][] modifiedG3 = bitCommit_HASH_SHA2_list(list1, list2, g3matrix);
-                ObjectOutputStream outmG3 = new ObjectOutputStream(MyClient.getOutputStream());
-                outmG3.writeObject(modifiedG3);
-                outmG3.flush();
+                //outmG3 = new ObjectOutputStream(MyClient.getOutputStream());
+                out.writeObject(modifiedG3);
+                //outmG3.flush();
                 if(Integer.parseInt(String.valueOf((char)num)) == 0) {
                     System.out.println("Run #" + runnum);
                     runnum++;
+                    Object[] alphaQ = {isofunc2,g3matrix,list1,list2};
                     System.out.println("alpha and Q requested");
-                    /*for(int counter = 0; counter < modifiedG3.length; counter++) {
-                        for(int counter2 = 0; counter2 < modifiedG3.length; counter2++) {
-                            System.out.print(modifiedG3[counter][counter2] + " ");
-                        }
-                        System.out.println();
-                    }*/
-                    ObjectOutputStream out5 = new ObjectOutputStream(MyClient.getOutputStream());
-                    out5.writeObject(isofunc2);
-                    out5.flush();
-                    ObjectOutputStream out6 = new ObjectOutputStream(MyClient.getOutputStream());
-                    out6.writeObject(g3matrix);
-                    out6.flush();
+                    //out3 = new ObjectOutputStream(MyClient.getOutputStream());
+                    out.writeObject(alphaQ);
+                    //out3.flush();
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 1) {
                     System.out.println("Run #" + runnum);
                     runnum++;
+                    Object[] piQprime = {pi,g3primematrix,list1,list2};
                     System.out.println("pi and subgraph Q' requested");
-                    /*for(int counter = 0; counter < modifiedG3.length; counter++) {
-                        for(int counter2 = 0; counter2 < modifiedG3.length; counter2++) {
-                            System.out.print(modifiedG3[counter][counter2] + " ");
-                        }
-                        System.out.println();
-                    }*/
-                    ObjectOutputStream out3 = new ObjectOutputStream(MyClient.getOutputStream());
-                    out3.writeObject(pi);
-                    out3.flush();
-                    ObjectOutputStream out4 = new ObjectOutputStream(MyClient.getOutputStream());
-                    out4.writeObject(g3primematrix);
-                    out4.flush();
+                    //out4 = new ObjectOutputStream(MyClient.getOutputStream());
+                    out.writeObject(piQprime);
+                    //out4.flush();
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 2) {
                     break;
                 }
+                out.flush();
             }
+            out.close();
         }
         catch (IOException e) {
             System.out.println(e);
         }
         
-        //System.exit(0);
+        System.exit(0);
     }
 }

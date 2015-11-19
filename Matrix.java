@@ -257,7 +257,7 @@ class Matrix extends Object {
 
 	public Matrix dictToMatrixX(HashMap newGraph, int size) {
 		Matrix newMatrix = new Matrix(newGraph.size());
-		for (Object key : newGraph.keySet()) {
+		/*for (Object key : newGraph.keySet()) {
 			if (newGraph.get(key) != 1 && newGraph.get(key) != 0) {
 				List<Integer> x = new ArrayList<Integer>();
 				for (int i = 0; i < size; i++) {
@@ -270,7 +270,7 @@ class Matrix extends Object {
 					newMatrix.getRow((int)key).set(i, 1);
 				}
 			}
-		}
+		}*/
 		return newMatrix;
 	}
 	
