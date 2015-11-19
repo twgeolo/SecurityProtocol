@@ -7,6 +7,11 @@ import java.io.File;
 import java.io.FileWriter;
 import javax.swing.JOptionPane;
 import java.io.ObjectInputStream;
+import javax.crypto.Mac;
+import java.util.*;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class client {
     private static int tl = 0;
@@ -15,6 +20,7 @@ public class client {
     private static String[] isofunc2;
     
     public static String[][] createMatrix(int size) {
+        size = 5;
         String matrix[][] = new String[size][size];
         for(int counter = 0; counter < size; counter++) {
             for(int counter2 = 0; counter2 < size; counter2++) {
@@ -144,9 +150,64 @@ public class client {
         return newMatrix;
     }
     
+    private static String convToHex(byte[] data) {
+        StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < data.length; i++) {
+            int halfbyte = (data[i] >>> 4) & 0x0F;
+            int two_halfs = 0;
+            do {
+                if ((0 <= halfbyte) && (halfbyte <= 9))
+                    buf.append((char) ('0' + halfbyte));
+                else
+                    buf.append((char) ('a' + (halfbyte - 10)));
+                halfbyte = data[i] & 0x0F;
+            } while(two_halfs++ < 1);
+        }
+        return buf.toString();
+    }
+    
+    public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException  {
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        byte[] sha1hash = new byte[40];
+        md.update(text.getBytes("iso-8859-1"), 0, text.length());
+        sha1hash = md.digest();
+        return convToHex(sha1hash);
+    }
+
+    
+    public static String[][] bitCommit_HASH_SHA2_list(String[][] list1, String[][] list2, String[][] bitList){
+        String[][] commitment = new String[bitList.length][bitList.length];
+        for (int i = 0; i < bitList.length; i++){
+            for (int j = 0; j < bitList.length; j++){
+                StringBuilder sb = new StringBuilder();
+                sb.append(list1[i][j]);
+                sb.append(list2[i][j]);
+                sb.append(bitList[i][j]);
+                try{
+                    commitment[i][j] = SHA1(sb.toString());
+                }catch (Exception e){
+                };
+            }
+        }
+        return commitment;
+    }
+    
+    public static String[][] getRandMatrix(int size, int maxRandValue){
+        Random random = new Random();
+        String[][] matrix = new String[size][size];
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                matrix[i][j] = Integer.toString(random.nextInt(maxRandValue));
+            }
+        }
+        return matrix;
+    }
+    
     public static String[][] supergraph(String[][] subgraph) {
         tl = (int)(Math.random()*41+10);
         rb = (int)(Math.random()*41+10);
+        tl = 1;
+        rb = 1;
         int rowLen = subgraph.length + tl + rb;
         String supgraph[][] = new String[rowLen][rowLen];
         for(int counter = 0; counter < tl; counter++) {
@@ -564,18 +625,37 @@ public class client {
                 String matrixcopy3[][] = new String[matrixcopy.length][matrixcopy.length];
                 String g3primematrix[][] = new String[1000][1000];
                 g3primematrix = subgraph(g3matrix);
+                int list1maxvalue = (int)(Math.random()*11+11);
+                int list2maxvalue = (int)(Math.random()*11+11);
+                String list1[][] = getRandMatrix(g3matrix.length, list1maxvalue);
+                String list2[][] = getRandMatrix(g3matrix.length, list2maxvalue);
+                String[][] modifiedG3 = bitCommit_HASH_SHA2_list(list1, list2, g3matrix);
+                ObjectOutputStream outmG3 = new ObjectOutputStream(MyClient.getOutputStream());
+                outmG3.writeObject(modifiedG3);
                 if(Integer.parseInt(String.valueOf((char)num)) == 0) {
                     System.out.println("Run #" + runnum);
                     runnum++;
-                    System.out.println("alpha and G3 requested");
-                    ObjectOutputStream out3 = new ObjectOutputStream(MyClient.getOutputStream());
-                    out3.writeObject(isofunc2);
-                    ObjectOutputStream out4 = new ObjectOutputStream(MyClient.getOutputStream());
-                    out4.writeObject(g3matrix);
+                    System.out.println("alpha and Q requested");
+                    for(int counter = 0; counter < modifiedG3.length; counter++) {
+                        for(int counter2 = 0; counter2 < modifiedG3.length; counter2++) {
+                            System.out.print(modifiedG3[counter][counter2] + " ");
+                        }
+                        System.out.println();
+                    }
+                    ObjectOutputStream out5 = new ObjectOutputStream(MyClient.getOutputStream());
+                    out5.writeObject(isofunc2);
+                    ObjectOutputStream out6 = new ObjectOutputStream(MyClient.getOutputStream());
+                    out6.writeObject(g3matrix);
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 1) {
                     System.out.println("Run #" + runnum);
                     runnum++;
-                    System.out.println("pi and subgraph G3' requested");
+                    System.out.println("pi and subgraph Q' requested");
+                    for(int counter = 0; counter < modifiedG3.length; counter++) {
+                        for(int counter2 = 0; counter2 < modifiedG3.length; counter2++) {
+                            System.out.print(modifiedG3[counter][counter2] + " ");
+                        }
+                        System.out.println();
+                    }
                     ObjectOutputStream out3 = new ObjectOutputStream(MyClient.getOutputStream());
                     out3.writeObject(pi);
                     ObjectOutputStream out4 = new ObjectOutputStream(MyClient.getOutputStream());

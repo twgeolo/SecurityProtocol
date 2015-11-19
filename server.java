@@ -49,13 +49,22 @@ public class server {
                             int runnum = flag + 1;
                             System.out.println("Run #" + runnum);
                             int value = (int)(Math.random()*2);
+                            writer.write(String.valueOf(value));
+                            writer.flush();
+                            System.out.println("Waiting for commitment");
+                            ObjectInputStream inputmG3 = new ObjectInputStream(socket.getInputStream());
+                            String[][] modifiedG3 = (String[][])inputmG3.readObject();
+                            for(int counter = 0; counter < modifiedG3.length; counter++) {
+                                for(int counter2 = 0; counter2 < modifiedG3.length; counter2++) {
+                                    System.out.print(modifiedG3[counter][counter2] + " ");
+                                }
+                                System.out.println();
+                            }
                             if(value == 0) {
                                 System.out.println("Requesting for alpha and Q");
                             } else if(value == 1) {
                                 System.out.println("Requesting for pi and subgraph Q'");
                             }
-                            writer.write(String.valueOf(value));
-                            writer.flush();
                             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                             if(value == 0) {
                                 ObjectInputStream input3 = new ObjectInputStream(socket.getInputStream());
