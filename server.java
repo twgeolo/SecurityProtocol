@@ -12,6 +12,10 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.net.*;
 import javax.swing.text.*;
+import javax.crypto.Mac;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class server {
     
@@ -133,6 +137,78 @@ public class server {
         return true;
     }
     
+    public static boolean matrixEqualCommitment(String[][] array1, String[][] array2) {
+        for(int counter = 0; counter < array1.length; counter++) {
+            for(int counter2 = 0; counter2 < array1.length; counter2++) {
+                if(!array1[counter][counter2].equals(array2[counter][counter2])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    private static String convToHex(byte[] data) {
+        StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < data.length; i++) {
+            int halfbyte = (data[i] >>> 4) & 0x0F;
+            int two_halfs = 0;
+            do {
+                if ((0 <= halfbyte) && (halfbyte <= 9))
+                    buf.append((char) ('0' + halfbyte));
+                else
+                    buf.append((char) ('a' + (halfbyte - 10)));
+                halfbyte = data[i] & 0x0F;
+            } while(two_halfs++ < 1);
+        }
+        return buf.toString();
+    }
+    
+    public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException  {
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        byte[] sha1hash = new byte[40];
+        md.update(text.getBytes("iso-8859-1"), 0, text.length());
+        sha1hash = md.digest();
+        return convToHex(sha1hash);
+    }
+    
+    public static boolean qprimeCommitment(String[][] list1, String[][] list2, String[][] qprime, String[][] modifiedQ) {
+        for(int counter = 0; counter < qprime.length; counter++) {
+            for(int counter2 = 0; counter2 < qprime.length; counter2++) {
+                if(Integer.parseInt(qprime[counter][counter2]) == -1) {
+                    continue;
+                } else {
+                    try {
+                        if(!SHA1(list1[counter][counter2] + list2[counter][counter2] + qprime[counter][counter2]).equals(modifiedQ[counter][counter2])){
+                            return false;
+                        }
+                    } catch(NoSuchAlgorithmException e) {
+                    } catch(UnsupportedEncodingException e) {
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
+    
+    public static String[][] bitCommit_HASH_SHA2_list(String[][] list1, String[][] list2, String[][] bitList){
+        String[][] commitment = new String[bitList.length][bitList.length];
+        for (int i = 0; i < bitList.length; i++){
+            for (int j = 0; j < bitList.length; j++){
+                StringBuilder sb = new StringBuilder();
+                sb.append(list1[i][j]);
+                sb.append(list2[i][j]);
+                sb.append(bitList[i][j]);
+                try{
+                    commitment[i][j] = SHA1(sb.toString());
+                }catch (Exception e){
+                };
+            }
+        }
+        return commitment;
+    }
+    
     public static String[][] validateAlpha(String[][] matrix, String[] isofunc) {
         String newMatrix[][] = new String[matrix.length][matrix.length];
         String oneOnly[][] = new String[matrix.length][matrix.length];
@@ -231,7 +307,6 @@ public class server {
         setupUI();
         
         int runtimes = (int)(Math.random()*11+5);  //5 to 15 times
-        System.out.println(runtimes);
         int flag = 0, flag2 = 0;
         try {
             ServerSocket listener = new ServerSocket(9090);
@@ -266,7 +341,18 @@ public class server {
                                 Object[] alphaQ = (Object[])input.readObject();
                                 String[] alpha = (String[])alphaQ[0];
                                 String[][] g3matrix = (String[][])alphaQ[1];
+                                String[][] list1 = (String[][])alphaQ[2];
+                                String[][] list2 = (String[][])alphaQ[3];
                                 System.out.println("Received alpha and Q");
+                                String[][] modifiedG3_2 = bitCommit_HASH_SHA2_list(list1, list2, g3matrix);
+                                boolean commitmentCheck = matrixEqualCommitment(modifiedG3,modifiedG3_2);
+                                if(commitmentCheck == false) {
+                                    flag++;
+                                    System.out.println("Commitment does not match");
+                                    break;
+                                } else {
+                                    System.out.println("Commitment does match");
+                                }
                                 String[][] maybeG3 = validateAlpha(g2matrix,alpha);
                                 System.out.println("Calculating Q using G2 and alpha");
                                 boolean check = matrixEqual(g3matrix,maybeG3);
@@ -279,7 +365,17 @@ public class server {
                                 Object[] piQprime = (Object[])input.readObject();
                                 String[] pi = (String[])piQprime[0];
                                 String[][] g3primematrix = (String[][])piQprime[1];
+                                String[][] list1 = (String[][])piQprime[2];
+                                String[][] list2 = (String[][])piQprime[3];
                                 System.out.println("Received pi and subgraph Q'");
+                                boolean commitmentCheck = qprimeCommitment(list1, list2, g3primematrix, modifiedG3);
+                                if(commitmentCheck == false) {
+                                    flag++;
+                                    System.out.println("Commitment does not match");
+                                    break;
+                                } else {
+                                    System.out.println("Commitment does match");
+                                }
                                 String[][] maybeG3prime = validatePi(g1matrix,pi,g2matrix.length);
                                 boolean check = matrixEqual(maybeG3prime,g3primematrix);
                                 if(check == true) {
