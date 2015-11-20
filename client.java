@@ -851,6 +851,5 @@ public class client {
 			setTextToLabel(e.toString());
             System.out.println(e);
         }
-        System.exit(0);
     }
 }
