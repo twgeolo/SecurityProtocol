@@ -148,28 +148,30 @@ public class server {
         return true;
     }
     
-    private static String convToHex(byte[] data) {
-        StringBuilder buf = new StringBuilder();
-        for (int i = 0; i < data.length; i++) {
-            int halfbyte = (data[i] >>> 4) & 0x0F;
-            int two_halfs = 0;
+    private static String convertHex(byte[] input) {
+        StringBuilder buffer = new StringBuilder();
+        for (int i = 0; i < input.length; i++) {
+            int mid = (input[i] >>> 4) & 0x0F;
+            int counter = 0;
             do {
-                if ((0 <= halfbyte) && (halfbyte <= 9))
-                    buf.append((char) ('0' + halfbyte));
-                else
-                    buf.append((char) ('a' + (halfbyte - 10)));
-                halfbyte = data[i] & 0x0F;
-            } while(two_halfs++ < 1);
+                if ((0 <= mid) && (mid <= 9)){
+                    buffer.append((char) ('0' + mid));
+				}
+                else{
+                    buffer.append((char) ('a' + (mid - 10)));
+				}
+                mid = input[i] & 0x0F;
+            } while(counter++ < 1);
         }
-        return buf.toString();
+        return buffer.toString();
     }
     
-    public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException  {
+    public static String crypto_hash(String plaintext) throws NoSuchAlgorithmException, UnsupportedEncodingException  {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
-        byte[] sha1hash = new byte[40];
-        md.update(text.getBytes("iso-8859-1"), 0, text.length());
-        sha1hash = md.digest();
-        return convToHex(sha1hash);
+        byte[] hash = new byte[40];
+        md.update(plaintext.getBytes("iso-8859-1"), 0, plaintext.length());
+        hash = md.digest();
+        return convertHex(hash);
     }
     
     public static boolean qprimeCommitment(String[][] list1, String[][] list2, String[][] qprime, String[][] modifiedQ) {
@@ -179,7 +181,7 @@ public class server {
                     continue;
                 } else {
                     try {
-                        if(!SHA1(list1[counter][counter2] + list2[counter][counter2] + qprime[counter][counter2]).equals(modifiedQ[counter][counter2])){
+                        if(!crypto_hash(list1[counter][counter2] + list2[counter][counter2] + qprime[counter][counter2]).equals(modifiedQ[counter][counter2])){
                             return false;
                         }
                     } catch(NoSuchAlgorithmException e) {
@@ -192,16 +194,16 @@ public class server {
     }
     
     
-    public static String[][] bitCommit_HASH_SHA2_list(String[][] list1, String[][] list2, String[][] bitList){
-        String[][] commitment = new String[bitList.length][bitList.length];
-        for (int i = 0; i < bitList.length; i++){
-            for (int j = 0; j < bitList.length; j++){
+    public static String[][] bitCommit(String[][] list1, String[][] list2, String[][] list3){
+        String[][] commitment = new String[list3.length][list3.length];
+        for (int i = 0; i < list3.length; i++){
+            for (int j = 0; j < list3.length; j++){
                 StringBuilder sb = new StringBuilder();
                 sb.append(list1[i][j]);
                 sb.append(list2[i][j]);
-                sb.append(bitList[i][j]);
+                sb.append(list3[i][j]);
                 try{
-                    commitment[i][j] = SHA1(sb.toString());
+                    commitment[i][j] = crypto_hash(sb.toString());
                 }catch (Exception e){
                 };
             }
@@ -344,7 +346,7 @@ public class server {
                                 String[][] list1 = (String[][])alphaQ[2];
                                 String[][] list2 = (String[][])alphaQ[3];
                                 System.out.println("Received alpha and Q");
-                                String[][] modifiedG3_2 = bitCommit_HASH_SHA2_list(list1, list2, g3matrix);
+                                String[][] modifiedG3_2 = bitCommit(list1, list2, g3matrix);
                                 boolean commitmentCheck = matrixEqualCommitment(modifiedG3,modifiedG3_2);
                                 if(commitmentCheck == false) {
                                     flag++;
