@@ -131,6 +131,7 @@ public class Client {
     private static int rb = 0;
     private static String[] isofunc;
     private static String[] isofunc2;
+    private static int isocheck = 0;
     private static ObjectOutputStream out;
     
     
@@ -177,6 +178,7 @@ public class Client {
                 }
                 store[check] = matrix.length+1;
             }
+            isocheck = 1;
             String oneOnly[][] = new String[matrix.length][matrix.length];
             int counter3;
             String newGraph[][] = new String[matrix.length][matrix.length];
@@ -770,30 +772,32 @@ public class Client {
                 }
             }
             
-            x = 0;
-            String matrix3[] = new String[1100];
-            FileInputStream inputStream3 = new FileInputStream(ifile);
-            while (inputStream3.available() > 0) {
-                current = (char) inputStream3.read();
-                if(x == 0) {
-                    tl = (int)(current-'0');
-                    x++;
-                    continue;
+            if(isocheck == 0) {
+                x = 0;
+                String matrix3[] = new String[1100];
+                FileInputStream inputStream3 = new FileInputStream(ifile);
+                while (inputStream3.available() > 0) {
+                    current = (char) inputStream3.read();
+                    if(x == 0) {
+                        tl = (int)(current-'0');
+                        x++;
+                        continue;
+                    }
+                    if(x == 2) {
+                        rb = (int)(current-'0');
+                        x++;
+                        continue;
+                    }
+                    if(current == '\n') {
+                        x++;
+                        continue;
+                    }
+                    matrix3[x-4] = String.valueOf(current);
                 }
-                if(x == 2) {
-                    rb = (int)(current-'0');
-                    x++;
-                    continue;
+                isofunc = new String[x-4];
+                for(int counter = 0; counter < x-4; counter++) {
+                    isofunc[counter] = matrix3[counter];
                 }
-                if(current == '\n') {
-                    x++;
-                    continue;
-                }
-                matrix3[x-4] = String.valueOf(current);
-            }
-            isofunc = new String[x-4];
-            for(int counter = 0; counter < x-4; counter++) {
-                isofunc[counter] = matrix3[counter];
             }
             
             out = new ObjectOutputStream(MyClient.getOutputStream());
