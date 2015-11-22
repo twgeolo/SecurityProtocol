@@ -763,26 +763,20 @@ public class Client {
                 x = 0;
                 String matrix3[] = new String[1100];
                 FileInputStream inputStream3 = new FileInputStream(ifile);
+                tl = (char) inputStream3.read();
+                current = (char) inputStream3.read();
+                rb = (char) inputStream3.read();
+                current = (char) inputStream3.read();
                 while (inputStream3.available() > 0) {
                     current = (char) inputStream3.read();
-                    if(x == 0) {
-                        tl = (int)(current-'0');
-                        x++;
-                        continue;
-                    }
-                    if(x == 2) {
-                        rb = (int)(current-'0');
-                        x++;
-                        continue;
-                    }
                     if(current == '\n') {
                         x++;
-                        continue;
+                    } else {
+                        matrix3[x] = String.valueOf(current);
                     }
-                    matrix3[x-4] = String.valueOf(current);
                 }
-                isofunc = new String[x-4];
-                for(int counter = 0; counter < x-4; counter++) {
+                isofunc = new String[x];
+                for(int counter = 0; counter < x; counter++) {
                     isofunc[counter] = matrix3[counter];
                 }
             }
