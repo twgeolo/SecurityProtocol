@@ -25,10 +25,10 @@ public class client {
 
 	private static JTextPane chatLabel;
 	private static DefaultListModel model;
-
+	private static JFrame mainFrame;
+	
 	public static void setupUI() {
-    	JFrame mainFrame = new JFrame("Client UI");
-
+		mainFrame = new JFrame("Client UI");
 		// History Bar
 
     	JLabel historyBar = new JLabel("History", JLabel.CENTER);
@@ -484,194 +484,157 @@ public class client {
 
     public static void main (String[] args) {
 		setupUI();
-        File f;
-        int g1flag = 0;
-        int g2flag = 0;
-        int sflag = 0;
-        int iflag = 0;
-        int breakflag = 0;
-        String g1file = "g1.txt";
-        String g2file = "g2.txt";
-        String sfile = "s.txt";
-        String ifile = "i.txt";
-        if(args.length != 0) {
-            String store[] = new String[args.length];
-            int counter = 0;
-            while (counter < args.length) {
-                if(args[counter].equals("-g1")) {
-                    store[counter] = args[counter];
-                    if(counter+1 != args.length) {
-                        store[counter+1] = args[counter + 1];
-                        f = new File(store[counter+1]);
-                        if(!f.exists() || f.isDirectory()) {
-							setTextToLabel("Input valid file for g1.");
-                            System.out.println("Input valid file for g1.");
-                            breakflag = 1;
-                        } else {
-                            g1flag = 1;
-                            g1file = store[counter+1];
-                        }
-                    } else {
-						setTextToLabel("Input valid file for g1.");
-                        System.out.println("Input valid file for g1.");
-                        breakflag = 1;
-                        break;
-                    }
-                } else if(args[counter].equals("-g2")) {
-                    store[counter] = args[counter];
-                    if(counter+1 != args.length) {
-                        store[counter+1] = args[counter + 1];
-                        f = new File(store[counter+1]);
-                        if(!f.exists() || f.isDirectory()) {
-							setTextToLabel("Input valid file for g2.");
-                            System.out.println("Input valid file for g2.");
-                            breakflag = 1;
-                        } else {
-                            g2flag = 1;
-                            g2file = store[counter+1];
-                        }
-                    } else {
-						setTextToLabel("Input valid file for g2.");
-                        System.out.println("Input valid file for g2.");
-                        breakflag = 1;
-                        break;
-                    }
-                } else if(args[counter].equals("-s")) {
-                    store[counter] = args[counter];
-                    if(counter+1 != args.length) {
-                        store[counter+1] = args[counter + 1];
-                        f = new File(store[counter+1]);
-                        if(!f.exists() || f.isDirectory()) {
-							setTextToLabel("Input valid file for s.");
-                            System.out.println("Input valid file for s.");
-                            breakflag = 1;
-                        } else {
-                            sflag = 1;
-                            sfile = store[counter+1];
-                        }
-                    } else {
-						setTextToLabel("Input valid file for s.");
-                        System.out.println("Input valid file for s.");
-                        breakflag = 1;
-                        break;
-                    }
-                } else if(args[counter].equals("-i")) {
-                    store[counter] = args[counter];
-                    if(counter+1 != args.length) {
-                        store[counter+1] = args[counter + 1];
-                        f = new File(store[counter+1]);
-                        if(!f.exists() || f.isDirectory()) {
-							setTextToLabel("Input valid file for i.");
-                            System.out.println("Input valid file for i.");
-                            breakflag = 1;
-                        } else {
-                            iflag = 1;
-                            ifile = store[counter+1];
-                        }
-                    } else {
-						setTextToLabel("Input valid file for i.");
-                        System.out.println("Input valid file for i.");
-                        breakflag = 1;
-                        break;
-                    }
-                }
-                counter += 1;
+		
+		//input graphs
+		String g1file = "g1.txt";
+		String g2file = "g2.txt";
+		String sfile = "s.txt";
+		String ifile = "i.txt";
+		
+		String[] options = {"G1+G2+S+I","G1", "Random"};
+		String option = (JOptionPane.showInputDialog(null,"Choose input option:","",JOptionPane.QUESTION_MESSAGE,null,options,options[0])).toString(); 
+	
+		if (option.equals("G1+G2+S+I"))	 {
+			JOptionPane.showMessageDialog(null, "Select G1", "", JOptionPane.PLAIN_MESSAGE);
+			String g1filename = null;
+			while (g1filename == null) {
+				FileDialog fd = new FileDialog(mainFrame, "Select G1:", FileDialog.LOAD);
+				fd.setDirectory(System.getProperty("user.dir"));
+				fd.setFile("*.txt");
+				fd.setVisible(true);
+				g1filename = fd.getFile();
+			}
+			g1file = g1filename;
+			
+			JOptionPane.showMessageDialog(null, "Select G2", "", JOptionPane.PLAIN_MESSAGE);
+			String g2filename = null;
+			while (g2filename == null) {
+				FileDialog fd = new FileDialog(mainFrame, "Select G2:", FileDialog.LOAD);
+				fd.setDirectory(System.getProperty("user.dir"));
+				fd.setFile("*.txt");
+				fd.setVisible(true);
+				g2filename = fd.getFile();
+			}
+			g2file = g2filename;
+			
+			JOptionPane.showMessageDialog(null, "Select S", "", JOptionPane.PLAIN_MESSAGE);
+			String sfilename = null;
+			while (sfilename == null) {
+				FileDialog fd = new FileDialog(mainFrame, "Select S:", FileDialog.LOAD);
+				fd.setDirectory(System.getProperty("user.dir"));
+				fd.setFile("*.txt");
+				fd.setVisible(true);
+				sfilename = fd.getFile();
+			}
+			sfile = sfilename;	
+			
+			JOptionPane.showMessageDialog(null, "Select I", "", JOptionPane.PLAIN_MESSAGE);
+			String ifilename = null;
+			while (ifilename == null) {
+				FileDialog fd = new FileDialog(mainFrame, "Select I:", FileDialog.LOAD);
+				fd.setDirectory(System.getProperty("user.dir"));
+				fd.setFile("*.txt");
+				fd.setVisible(true);
+				ifilename = fd.getFile();
+			}
+			ifile = ifilename;		
+			
+		} else if (option.equals("G1")){
+			// choose G1
+			String filename = null;
+			while (filename == null) {
+				FileDialog fd = new FileDialog(mainFrame, "Select G1:", FileDialog.LOAD);
+				fd.setDirectory(System.getProperty("user.dir"));
+				fd.setFile("*.txt");
+				fd.setVisible(true);
+				filename = fd.getFile();
+			}
+			g1file = filename;		
+			// create other graphs
+			try {
+            	int x = 0;
+				int y = 0;
+               	String g1matrix[][] = new String[1000][1000];
+    			FileInputStream inputStream = new FileInputStream(g1file);
+				char current;
+				while (inputStream.available() > 0) {
+               		current = (char) inputStream.read();
+					if(current == '\n') {
+                   		x++;
+                   		y = 0;
+                   		continue;
+					} else if(current == ' ') {
+						continue;
+					}
+					g1matrix[x][y] = String.valueOf(current);
+					y++;
+				}
+				String g1matrixcopy[][] = new String[x][x];
+				for(int c = 0; c < x; c++) {
+					for(int c2 = 0; c2 < x; c2++) {
+						g1matrixcopy[c][c2] = g1matrix[c][c2];
+					}
+				}
+
+				System.out.println("Making G2'");
+				File file2 = new File(sfile);
+				if (!file2.exists()) {
+					file2.createNewFile();
+				}
+				FileWriter fw2 = new FileWriter(file2.getAbsoluteFile());
+				BufferedWriter bw2 = new BufferedWriter(fw2);
+				String smatrix[][] = new String[1000][1000];
+				smatrix = isomorphism(g1matrixcopy, 0);
+				for(int row = 0; row < smatrix.length; row++) {
+					for(int col =0; col < smatrix[row].length; col++) {
+						bw2.write(smatrix[row][col]);
+						bw2.write(" ");
+					}
+					bw2.write("\n");
+				}
+				bw2.close();
+
+				System.out.println("Making G2");
+				File file3 = new File(g2file);
+				if (!file3.exists()) {
+					file3.createNewFile();
+				}
+				FileWriter fw3 = new FileWriter(file3.getAbsoluteFile());
+				BufferedWriter bw3 = new BufferedWriter(fw3);
+				String g2matrix[][] = new String[1100][1100];
+				g2matrix = supergraph(smatrix);
+				for(int row = 0; row < g2matrix.length; row++) {
+					for(int col =0; col < g2matrix[row].length; col++) {
+						bw3.write(g2matrix[row][col]);
+						bw3.write(" ");
+					}
+					bw3.write("\n");
+				}
+				bw3.close();
+
+				System.out.println("Making phi");
+				File file4 = new File(ifile);
+				if (!file4.exists()) {
+					file4.createNewFile();
+				}
+				FileWriter fw4 = new FileWriter(file4.getAbsoluteFile());
+				BufferedWriter bw4 = new BufferedWriter(fw4);
+				bw4.write(String.valueOf(tl));
+				bw4.write("\n");
+				bw4.write(String.valueOf(rb));
+				bw4.write("\n");
+				for(int row = 0; row < isofunc.length; row++) {
+					bw4.write(isofunc[row]);
+					bw4.write("\n");
+				}
+				bw4.close();
+			}
+			catch (IOException e) {
+				setTextToLabel(e.toString());
+            	System.out.println(e);
             }
-            if(breakflag == 1) {
-                System.exit(1);
-            }
-            if(g1flag == 1 && g2flag == 1 && sflag == 1 && iflag == 1) {
-            } else if(g1flag == 1 && g2flag == 0 && sflag == 0 && iflag == 0) {
-                try {
-                    int x = 0;
-                    int y = 0;
-                    String g1matrix[][] = new String[1000][1000];
-                    FileInputStream inputStream = new FileInputStream(g1file);
-                    char current;
-                    while (inputStream.available() > 0) {
-                        current = (char) inputStream.read();
-                        if(current == '\n') {
-                            x++;
-                            y = 0;
-                            continue;
-                        } else if(current == ' ') {
-                            continue;
-                        }
-                        g1matrix[x][y] = String.valueOf(current);
-                        y++;
-                    }
-                    String g1matrixcopy[][] = new String[x][x];
-                    for(int c = 0; c < x; c++) {
-                        for(int c2 = 0; c2 < x; c2++) {
-                            g1matrixcopy[c][c2] = g1matrix[c][c2];
-                        }
-                    }
-
-                    System.out.println("Making G2'");
-                    File file2 = new File(sfile);
-                    if (!file2.exists()) {
-                        file2.createNewFile();
-                    }
-                    FileWriter fw2 = new FileWriter(file2.getAbsoluteFile());
-                    BufferedWriter bw2 = new BufferedWriter(fw2);
-                    String smatrix[][] = new String[1000][1000];
-                    smatrix = isomorphism(g1matrixcopy, 0);
-                    for(int row = 0; row < smatrix.length; row++) {
-                        for(int col =0; col < smatrix[row].length; col++) {
-                            bw2.write(smatrix[row][col]);
-                            bw2.write(" ");
-                        }
-                        bw2.write("\n");
-                    }
-                    bw2.close();
-
-                    System.out.println("Making G2");
-                    File file3 = new File(g2file);
-                    if (!file3.exists()) {
-                        file3.createNewFile();
-                    }
-                    FileWriter fw3 = new FileWriter(file3.getAbsoluteFile());
-                    BufferedWriter bw3 = new BufferedWriter(fw3);
-                    String g2matrix[][] = new String[1100][1100];
-                    g2matrix = supergraph(smatrix);
-                    for(int row = 0; row < g2matrix.length; row++) {
-                        for(int col =0; col < g2matrix[row].length; col++) {
-                            bw3.write(g2matrix[row][col]);
-                            bw3.write(" ");
-                        }
-                        bw3.write("\n");
-                    }
-                    bw3.close();
-
-                    System.out.println("Making phi");
-                    File file4 = new File(ifile);
-                    if (!file4.exists()) {
-                        file4.createNewFile();
-                    }
-                    FileWriter fw4 = new FileWriter(file4.getAbsoluteFile());
-                    BufferedWriter bw4 = new BufferedWriter(fw4);
-                    bw4.write(String.valueOf(tl));
-                    bw4.write("\n");
-                    bw4.write(String.valueOf(rb));
-                    bw4.write("\n");
-                    for(int row = 0; row < isofunc.length; row++) {
-                        bw4.write(isofunc[row]);
-                        bw4.write("\n");
-                    }
-                    bw4.close();
-                }
-                catch (IOException e) {
-					setTextToLabel(e.toString());
-                    System.out.println(e);
-                }
-            } else {
-				setTextToLabel("Files needed");
-                System.out.println("Files needed");
-                System.exit(0);
-            }
-
-        } else {
-            try {
+		} else {
+			try {
                 System.out.println("Making G1");
                 File file = new File(g1file);
                 if (!file.exists()) {
@@ -747,9 +710,11 @@ public class client {
             }
             catch (IOException e) {
 				setTextToLabel(e.toString());
-                System.out.println(e);
+				System.out.println(e);
             }
         }
+
+		//proving
         Socket MyClient;
         try {
             MyClient = new Socket("127.0.0.1", 9090);

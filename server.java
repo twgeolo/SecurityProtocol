@@ -112,6 +112,7 @@ public class server {
         mainFrame.setSize(768,576);
         mainFrame.setLayout(null);
         mainFrame.setVisible(true);
+		
     }
 
 	public static void setTextToLabel(final String str) {
@@ -123,7 +124,7 @@ public class server {
 		                      }
 		                });
 	}
-    
+
     public static boolean matrixEqual(String[][] array1, String[][] array2) {
         for(int counter = 0; counter < array1.length; counter++) {
             for(int counter2 = 0; counter2 < array1.length; counter2++) {
@@ -305,8 +306,25 @@ public class server {
     
     public static void main (String[] args) {
         setupUI();
-        
-        int runtimes = (int)(Math.random()*11+5);  //5 to 15 times
+
+		// input number of runs
+		int runtimes = 0;
+		while (runtimes == 0) {
+			String runnuminput = JOptionPane.showInputDialog(null,"Enter number of runs ( 'rand' for a random number):","",
+									JOptionPane.PLAIN_MESSAGE);
+			if (runnuminput == null || runnuminput.equals("rand")) {
+					runtimes = (int)(Math.random()*11+5);  //5 to 15 times
+			} else {
+				try {
+					runtimes = Integer.parseInt(runnuminput);
+				}
+				catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(null, "This is not a number!", "Error!", JOptionPane.PLAIN_MESSAGE);
+				}
+			}
+		}
+		
+		//main
         int flag = 0, flag2 = 0;
         try {
             ServerSocket listener = new ServerSocket(9090);
