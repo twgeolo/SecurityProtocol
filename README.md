@@ -3,5 +3,5 @@
 Anshi Chitransh, Ming Lee, George Lo, Kartik Sawant
 
 To run:
-javac server.java; java server
-javac client.java; java client
+javac Server.java; java Server
+javac Client.java; java Client

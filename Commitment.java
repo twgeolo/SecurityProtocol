@@ -42,8 +42,8 @@ public class Commitment {
         for (int i = 0; i < result.length; i++){
             for (int j = 0; j < result.length; j++){
                 /*System.out.println(list1[i][j]);
-                System.out.println(list2[i][j]);
-                System.out.println(bitlist[i][j]);*/
+                 System.out.println(list2[i][j]);
+                 System.out.println(bitlist[i][j]);*/
                 System.out.println(result[i][j]);
             }
             System.out.println();

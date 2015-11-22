@@ -17,13 +17,13 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class server {
+public class Server {
     
     static JScrollPane history;
     static JTextPane chatLabel;
-	static DefaultListModel model;
-	static JList list;
-	static JFrame mainFrame;
+    static DefaultListModel model;
+    static JList list;
+    static JFrame mainFrame;
     
     public static void setupUI() {
         mainFrame = new JFrame("Server UI");
@@ -40,14 +40,14 @@ public class server {
         
         // History List
         
-		model = new DefaultListModel();
-		model.addElement(new HistoryEntry("Let's begin", "Past.png"));
-		list = new JList(model);
-		font = new Font("Helvetica Neue", Font.PLAIN, 15);
-		list.setFont(font);
-		list.setCellRenderer(new HistoryCellRenderer());
-		history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		history.setBorder(BorderFactory.createEmptyBorder());
+        model = new DefaultListModel();
+        model.addElement(new HistoryEntry("Let's begin", "Past.png"));
+        list = new JList(model);
+        font = new Font("Helvetica Neue", Font.PLAIN, 15);
+        list.setFont(font);
+        list.setCellRenderer(new HistoryCellRenderer());
+        history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        history.setBorder(BorderFactory.createEmptyBorder());
         
         // Main
         
@@ -112,19 +112,19 @@ public class server {
         mainFrame.setSize(768,576);
         mainFrame.setLayout(null);
         mainFrame.setVisible(true);
-		
+        
     }
-
-	public static void setTextToLabel(final String str) {
-		 SwingUtilities.invokeLater(new Runnable() {
-		                      public void run() {
-		String listText = "<html>" + str.replaceAll(": ", "<br>") + "</html>";
-		model.addElement(new HistoryEntry(listText, "Past.png"));
-		chatLabel.setText(str);
-		                      }
-		                });
-	}
-
+    
+    public static void setTextToLabel(final String str) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                String listText = "<html>" + str.replaceAll(": ", "<br>") + "</html>";
+                model.addElement(new HistoryEntry(listText, "Past.png"));
+                chatLabel.setText(str);
+            }
+        });
+    }
+    
     public static boolean matrixEqual(String[][] array1, String[][] array2) {
         for(int counter = 0; counter < array1.length; counter++) {
             for(int counter2 = 0; counter2 < array1.length; counter2++) {
@@ -155,10 +155,10 @@ public class server {
             do {
                 if ((0 <= mid) && (mid <= 9)){
                     buffer.append((char) ('0' + mid));
-				}
+                }
                 else{
                     buffer.append((char) ('a' + (mid - 10)));
-				}
+                }
                 mid = input[i] & 0x0F;
             } while(counter++ < 1);
         }
@@ -306,25 +306,25 @@ public class server {
     
     public static void main (String[] args) {
         setupUI();
-
-		// input number of runs
-		int runtimes = 0;
-		while (runtimes == 0) {
-			String runnuminput = JOptionPane.showInputDialog(null,"Enter number of runs ( 'rand' for a random number):","",
-									JOptionPane.PLAIN_MESSAGE);
-			if (runnuminput == null || runnuminput.equals("rand")) {
-					runtimes = (int)(Math.random()*11+5);  //5 to 15 times
-			} else {
-				try {
-					runtimes = Integer.parseInt(runnuminput);
-				}
-				catch (NumberFormatException e) {
-					JOptionPane.showMessageDialog(null, "This is not a number!", "Error!", JOptionPane.PLAIN_MESSAGE);
-				}
-			}
-		}
-		
-		//main
+        
+        // input number of runs
+        int runtimes = 0;
+        while (runtimes == 0) {
+            String runnuminput = JOptionPane.showInputDialog(null,"Enter number of runs ( 'rand' for a random number):","",
+                                                             JOptionPane.PLAIN_MESSAGE);
+            if (runnuminput == null || runnuminput.equals("rand")) {
+                runtimes = (int)(Math.random()*11+5);  //5 to 15 times
+            } else {
+                try {
+                    runtimes = Integer.parseInt(runnuminput);
+                }
+                catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "This is not a number!", "Error!", JOptionPane.PLAIN_MESSAGE);
+                }
+            }
+        }
+        
+        //main
         int flag = 0, flag2 = 0;
         try {
             ServerSocket listener = new ServerSocket(9090);
@@ -346,7 +346,7 @@ public class server {
                             setTextToLabel("Run #" + runnum + ": Waiting for commitment");
                             System.out.println("Waiting for commitment");
                             String[][] modifiedG3 = (String[][])input.readObject();
-							setTextToLabel("Run #" + runnum + ": Commitment received");
+                            setTextToLabel("Run #" + runnum + ": Commitment received");
                             System.out.println("Commitment received");
                             if(value == 0) {
                                 setTextToLabel("Run #" + runnum + ": Requesting for alpha and Q");
@@ -362,28 +362,28 @@ public class server {
                                 String[][] g3matrix = (String[][])alphaQ[1];
                                 String[][] list1 = (String[][])alphaQ[2];
                                 String[][] list2 = (String[][])alphaQ[3];
-								setTextToLabel("Run #" + runnum + ": Received alpha and Q");
+                                setTextToLabel("Run #" + runnum + ": Received alpha and Q");
                                 System.out.println("Received alpha and Q");
                                 String[][] modifiedG3_2 = bitCommit(list1, list2, g3matrix);
                                 boolean commitmentCheck = matrixEqualCommitment(modifiedG3,modifiedG3_2);
                                 if(commitmentCheck == false) {
                                     flag++;
-									setTextToLabel("Run #" + runnum + ": Commitment does not match");
+                                    setTextToLabel("Run #" + runnum + ": Commitment does not match");
                                     System.out.println("Commitment does not match");
                                     break;
                                 } else {
-									setTextToLabel("Run #" + runnum + ": Commitment does match");
+                                    setTextToLabel("Run #" + runnum + ": Commitment does match");
                                     System.out.println("Commitment does match");
                                 }
                                 String[][] maybeG3 = validateAlpha(g2matrix,alpha);
-								setTextToLabel("Run #" + runnum + ": Calculating Q using G2 and alpha");
+                                setTextToLabel("Run #" + runnum + ": Calculating Q using G2 and alpha");
                                 System.out.println("Calculating Q using G2 and alpha");
                                 boolean check = matrixEqual(g3matrix,maybeG3);
                                 if(check == true) {
-									setTextToLabel("Run #" + runnum + ": Calculated Q is the same as received Q");
+                                    setTextToLabel("Run #" + runnum + ": Calculated Q is the same as received Q");
                                     System.out.println("Calculated Q is the same as received Q");
                                 } else {
-									setTextToLabel("Run #" + runnum + ": Calculated Q is not the same as received Q");
+                                    setTextToLabel("Run #" + runnum + ": Calculated Q is not the same as received Q");
                                     System.out.println("Calculated Q is not the same as received Q");
                                 }
                             } else if(value == 1) {
@@ -392,25 +392,25 @@ public class server {
                                 String[][] g3primematrix = (String[][])piQprime[1];
                                 String[][] list1 = (String[][])piQprime[2];
                                 String[][] list2 = (String[][])piQprime[3];
-								setTextToLabel("Run #" + runnum + ": Received pi and subgraph Q'");
+                                setTextToLabel("Run #" + runnum + ": Received pi and subgraph Q'");
                                 System.out.println("Received pi and subgraph Q'");
                                 boolean commitmentCheck = qprimeCommitment(list1, list2, g3primematrix, modifiedG3);
                                 if(commitmentCheck == false) {
                                     flag++;
-									setTextToLabel("Run #" + runnum + ": Commitment does not match");
+                                    setTextToLabel("Run #" + runnum + ": Commitment does not match");
                                     System.out.println("Commitment does not match");
                                     break;
                                 } else {
-									setTextToLabel("Run #" + runnum + ": Commitment does match");
+                                    setTextToLabel("Run #" + runnum + ": Commitment does match");
                                     System.out.println("Commitment does match");
                                 }
                                 String[][] maybeG3prime = validatePi(g1matrix,pi,g2matrix.length);
                                 boolean check = matrixEqual(maybeG3prime,g3primematrix);
                                 if(check == true) {
-									setTextToLabel("Run #" + runnum + ": Calculated Q' is the same as received Q'");
+                                    setTextToLabel("Run #" + runnum + ": Calculated Q' is the same as received Q'");
                                     System.out.println("Calculated Q' is the same as received Q'");
                                 } else {
-									setTextToLabel("Run #" + runnum + ": Calculated Q is the same as received Q'");
+                                    setTextToLabel("Run #" + runnum + ": Calculated Q is the same as received Q'");
                                     System.out.println("Calculated Q is the same as received Q'");
                                 }
                             }
