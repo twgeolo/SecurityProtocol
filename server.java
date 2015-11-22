@@ -346,6 +346,7 @@ public class server {
                             setTextToLabel("Run #" + runnum + ": Waiting for commitment");
                             System.out.println("Waiting for commitment");
                             String[][] modifiedG3 = (String[][])input.readObject();
+							setTextToLabel("Run #" + runnum + ": Commitment received");
                             System.out.println("Commitment received");
                             if(value == 0) {
                                 setTextToLabel("Run #" + runnum + ": Requesting for alpha and Q");
@@ -361,22 +362,28 @@ public class server {
                                 String[][] g3matrix = (String[][])alphaQ[1];
                                 String[][] list1 = (String[][])alphaQ[2];
                                 String[][] list2 = (String[][])alphaQ[3];
+								setTextToLabel("Run #" + runnum + ": Received alpha and Q");
                                 System.out.println("Received alpha and Q");
                                 String[][] modifiedG3_2 = bitCommit(list1, list2, g3matrix);
                                 boolean commitmentCheck = matrixEqualCommitment(modifiedG3,modifiedG3_2);
                                 if(commitmentCheck == false) {
                                     flag++;
+									setTextToLabel("Run #" + runnum + ": Commitment does not match");
                                     System.out.println("Commitment does not match");
                                     break;
                                 } else {
+									setTextToLabel("Run #" + runnum + ": Commitment does match");
                                     System.out.println("Commitment does match");
                                 }
                                 String[][] maybeG3 = validateAlpha(g2matrix,alpha);
+								setTextToLabel("Run #" + runnum + ": Calculating Q using G2 and alpha");
                                 System.out.println("Calculating Q using G2 and alpha");
                                 boolean check = matrixEqual(g3matrix,maybeG3);
                                 if(check == true) {
+									setTextToLabel("Run #" + runnum + ": Calculated Q is the same as received Q");
                                     System.out.println("Calculated Q is the same as received Q");
                                 } else {
+									setTextToLabel("Run #" + runnum + ": Calculated Q is not the same as received Q");
                                     System.out.println("Calculated Q is not the same as received Q");
                                 }
                             } else if(value == 1) {
@@ -385,20 +392,25 @@ public class server {
                                 String[][] g3primematrix = (String[][])piQprime[1];
                                 String[][] list1 = (String[][])piQprime[2];
                                 String[][] list2 = (String[][])piQprime[3];
+								setTextToLabel("Run #" + runnum + ": Received pi and subgraph Q'");
                                 System.out.println("Received pi and subgraph Q'");
                                 boolean commitmentCheck = qprimeCommitment(list1, list2, g3primematrix, modifiedG3);
                                 if(commitmentCheck == false) {
                                     flag++;
+									setTextToLabel("Run #" + runnum + ": Commitment does not match");
                                     System.out.println("Commitment does not match");
                                     break;
                                 } else {
+									setTextToLabel("Run #" + runnum + ": Commitment does match");
                                     System.out.println("Commitment does match");
                                 }
                                 String[][] maybeG3prime = validatePi(g1matrix,pi,g2matrix.length);
                                 boolean check = matrixEqual(maybeG3prime,g3primematrix);
                                 if(check == true) {
+									setTextToLabel("Run #" + runnum + ": Calculated Q' is the same as received Q'");
                                     System.out.println("Calculated Q' is the same as received Q'");
                                 } else {
+									setTextToLabel("Run #" + runnum + ": Calculated Q is the same as received Q'");
                                     System.out.println("Calculated Q is the same as received Q'");
                                 }
                             }

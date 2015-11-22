@@ -576,6 +576,7 @@ public class client {
 					}
 				}
 
+				setTextToLabel("Making G2'");
 				System.out.println("Making G2'");
 				File file2 = new File(sfile);
 				if (!file2.exists()) {
@@ -593,7 +594,8 @@ public class client {
 					bw2.write("\n");
 				}
 				bw2.close();
-
+				
+				setTextToLabel("Making G2");
 				System.out.println("Making G2");
 				File file3 = new File(g2file);
 				if (!file3.exists()) {
@@ -612,6 +614,7 @@ public class client {
 				}
 				bw3.close();
 
+				setTextToLabel("Making phi");
 				System.out.println("Making phi");
 				File file4 = new File(ifile);
 				if (!file4.exists()) {
@@ -635,6 +638,7 @@ public class client {
             }
 		} else {
 			try {
+				setTextToLabel("Making G1");
                 System.out.println("Making G1");
                 File file = new File(g1file);
                 if (!file.exists()) {
@@ -655,6 +659,7 @@ public class client {
                 }
                 bw.close();
                 
+				setTextToLabel("Making G2'");
                 System.out.println("Making G2'");
                 File file2 = new File(sfile);
                 if (!file2.exists()) {
@@ -673,6 +678,7 @@ public class client {
                 }
                 bw2.close();
                 
+				setTextToLabel("Making G2");
                 System.out.println("Making G2");
                 File file3 = new File(g2file);
                 if (!file3.exists()) {
@@ -691,6 +697,7 @@ public class client {
                 }
                 bw3.close();
 
+				setTextToLabel("Making phi");
                 System.out.println("Making phi");
                 File file4 = new File(ifile);
                 if (!file4.exists()) {
@@ -813,6 +820,7 @@ public class client {
                 if(Integer.parseInt(String.valueOf((char)num)) != 2) {
                     System.out.println("Run #" + runnum);
                     out.writeObject(modifiedG3);
+					setTextToLabel("Run #" + runnum + ": Commitment sent");
                     System.out.println("Commitment sent");
                 }
                 if(Integer.parseInt(String.valueOf((char)num)) == 0) {
@@ -821,6 +829,7 @@ public class client {
                     Object[] alphaQ = {isofunc2,g3matrix,list1,list2};
                     System.out.println("Request for alpha and Q received");
                     out.writeObject(alphaQ);
+					setTextToLabel("Run #" + (runnum - 1) + ": Sent alpha and Q");
                     System.out.println("Sent alpha and Q");
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 1) {
 					setTextToLabel("Run #" + runnum + ": Request for pi and subgraph Q' received");
@@ -828,6 +837,7 @@ public class client {
                     Object[] piQprime = {pi,g3primematrix,list1,list2};
                     System.out.println("Request for pi and subgraph Q' received");
                     out.writeObject(piQprime);
+					setTextToLabel("Run #" + (runnum - 1) + ": Sent pi and subgraph Q'");
                     System.out.println("Sent pi and subgraph Q'");
                 } else if(Integer.parseInt(String.valueOf((char)num)) == 2) {
                     break;
