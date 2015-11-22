@@ -136,7 +136,6 @@ public class Client {
     
     
     public static String[][] createMatrix(int size) {
-        size = 5;
         String matrix[][] = new String[size][size];
         for(int counter = 0; counter < size; counter++) {
             for(int counter2 = 0; counter2 < size; counter2++) {
@@ -322,8 +321,6 @@ public class Client {
     public static String[][] supergraph(String[][] subgraph) {
         tl = (int)(Math.random()*41+10);
         rb = (int)(Math.random()*41+10);
-        tl = 1;
-        rb = 1;
         int rowLen = subgraph.length + tl + rb;
         String supgraph[][] = new String[rowLen][rowLen];
         for(int counter = 0; counter < tl; counter++) {
