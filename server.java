@@ -21,11 +21,12 @@ public class server {
     
     static JScrollPane history;
     static JTextPane chatLabel;
-    static HistoryEntry[] entries;
-    static JList<HistoryEntry> list;
+	static DefaultListModel model;
+	static JList list;
+	static JFrame mainFrame;
     
     public static void setupUI() {
-        JFrame mainFrame = new JFrame("Server UI");
+        mainFrame = new JFrame("Server UI");
         
         // History Bar
         
@@ -39,15 +40,14 @@ public class server {
         
         // History List
         
-        entries = new HistoryEntry[] {
-            new HistoryEntry("Let's begin", "Past.png")
-        };
-        list = new JList<HistoryEntry>(entries);
-        font = new Font("Helvetica Neue", Font.PLAIN, 15);
-        list.setFont(font);
-        list.setCellRenderer(new HistoryCellRenderer());
-        history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        history.setBorder(BorderFactory.createEmptyBorder());
+		model = new DefaultListModel();
+		model.addElement(new HistoryEntry("Let's begin", "Past.png"));
+		list = new JList(model);
+		font = new Font("Helvetica Neue", Font.PLAIN, 15);
+		list.setFont(font);
+		list.setCellRenderer(new HistoryCellRenderer());
+		history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		history.setBorder(BorderFactory.createEmptyBorder());
         
         // Main
         
@@ -113,18 +113,16 @@ public class server {
         mainFrame.setLayout(null);
         mainFrame.setVisible(true);
     }
-    
-    public static void setTextToLabel(String str) {
-        String listText = "<html>" + str.replaceAll(": ", "<br>") + "</html>";
-        int length = entries.length;
-        HistoryEntry[] array = Arrays.copyOf(entries, length + 1);
-        array[length] = new HistoryEntry(listText, "Past.png");
-        entries = array;
-        list.setListData(entries);
-        history.revalidate();
-        history.repaint();
-        chatLabel.setText(str);
-    }
+
+	public static void setTextToLabel(final String str) {
+		 SwingUtilities.invokeLater(new Runnable() {
+		                      public void run() {
+		String listText = "<html>" + str.replaceAll(": ", "<br>") + "</html>";
+		model.addElement(new HistoryEntry(listText, "Past.png"));
+		chatLabel.setText(str);
+		                      }
+		                });
+	}
     
     public static boolean matrixEqual(String[][] array1, String[][] array2) {
         for(int counter = 0; counter < array1.length; counter++) {

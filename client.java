@@ -23,10 +23,8 @@ import javax.swing.text.*;
 
 public class client {
 
-	static JScrollPane history;
-	static JTextPane chatLabel;
-	static HistoryEntry[] entries;
-	static JList<HistoryEntry> list;
+	private static JTextPane chatLabel;
+	private static DefaultListModel model;
 
 	public static void setupUI() {
     	JFrame mainFrame = new JFrame("Client UI");
@@ -43,15 +41,15 @@ public class client {
 
 		// History List
 
-		entries = new HistoryEntry[] {
-			new HistoryEntry("Let's begin", "Past.png")
-		};
-    	list = new JList<HistoryEntry>(entries);
+		model = new DefaultListModel();
+		model.addElement(new HistoryEntry("Let's begin", "Past.png"));
+    	JList list = new JList(model);
 		font = new Font("Helvetica Neue", Font.PLAIN, 15);
     	list.setFont(font);
     	list.setCellRenderer(new HistoryCellRenderer());
-    	history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    	JScrollPane history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		history.setBorder(BorderFactory.createEmptyBorder());
+		history.setVisible(true);
 
 		// Main
 
@@ -99,7 +97,7 @@ public class client {
     	mainBar.setBounds(320, 0, 448, 33);
 		peggyPanel.setBounds(494, 288, 100, 100);
 		peggyLabel.setBounds(494, 388, 100, 30);
-		chatLabel.setBounds(369, 163, 350, 40);
+		chatLabel.setBounds(344, 163, 400, 40);
 
 		// Add the subviews
 
@@ -109,7 +107,7 @@ public class client {
 		mainFrame.getContentPane().add(peggyPanel);
 		mainFrame.getContentPane().add(peggyLabel);
 		mainFrame.getContentPane().add(chatLabel);
-
+		
 		mainFrame.getContentPane().setBackground(Color.white);
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     	mainFrame.setResizable(false);
@@ -118,16 +116,14 @@ public class client {
     	mainFrame.setVisible(true);
 	}
 
-	public static void setTextToLabel(String str) {
+	public static void setTextToLabel(final String str) {
+		 SwingUtilities.invokeLater(new Runnable() {
+		                      public void run() {
 		String listText = "<html>" + str.replaceAll(": ", "<br>") + "</html>";
-		int length = entries.length;
-    	HistoryEntry[] array = Arrays.copyOf(entries, length + 1);
-    	array[length] = new HistoryEntry(listText, "Past.png");
-		entries = array;
-		list.setListData(entries);
-     	history.revalidate();
-     	history.repaint();
+		model.addElement(new HistoryEntry(listText, "Past.png"));
 		chatLabel.setText(str);
+		                      }
+		                });
 	}
 
     private static int tl = 0;
