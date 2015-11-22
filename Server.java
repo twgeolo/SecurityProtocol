@@ -41,7 +41,7 @@ public class Server {
         // History List
         
         model = new DefaultListModel();
-        model.addElement(new HistoryEntry("Let's begin", "Past.png"));
+        model.addElement(new HistoryEntry("Let's begin", "Images/Past.png"));
         list = new JList(model);
         font = new Font("Helvetica Neue", Font.PLAIN, 15);
         list.setFont(font);
@@ -61,7 +61,7 @@ public class Server {
         
         // Victor image
         
-        ImagePanel victorPanel = new ImagePanel("Victor.png");
+        ImagePanel victorPanel = new ImagePanel("Images/Victor.png");
         victorPanel.setBackground(Color.white);
         
         // Victor label
@@ -119,7 +119,7 @@ public class Server {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 String listText = "<html>" + str.replaceAll(": ", "<br>") + "</html>";
-                model.addElement(new HistoryEntry(listText, "Past.png"));
+                model.addElement(new HistoryEntry(listText, "Images/Past.png"));
                 chatLabel.setText(str);
             }
         });

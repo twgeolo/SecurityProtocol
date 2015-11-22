@@ -1,12 +1,9 @@
 import javax.swing.*;
-import javax.imageio.ImageIO;
+import javax.imageio.*;
 
 class HistoryEntry {
     private final String title;
-    
     private final String imagePath;
-    
-    private ImageIcon image;
     
     public HistoryEntry(String title, String imagePath) {
         this.title = title;
@@ -18,14 +15,6 @@ class HistoryEntry {
     }
     
     public ImageIcon getImage() {
-        if (image == null) {
-            image = new ImageIcon(imagePath);
-        }
-        return image;
-    }
-    
-    // Override standard toString method to give a useful result
-    public String toString() {
-        return title;
+        return new ImageIcon(imagePath);
     }
 }

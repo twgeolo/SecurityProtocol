@@ -1,8 +1,8 @@
-import java.awt.image.*;
-import java.awt.*;
 import java.io.*;
+import java.awt.*;
 import javax.swing.*;
 import javax.imageio.*;
+import java.awt.image.*;
 
 public class ImagePanel extends JPanel {
     

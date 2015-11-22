@@ -1,6 +1,6 @@
 import java.awt.*;
-import javax.swing.border.*;
 import java.awt.geom.*;
+import javax.swing.border.*;
 
 public class RoundedBorder extends AbstractBorder {
     private final Color color;
