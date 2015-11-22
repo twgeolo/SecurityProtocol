@@ -361,7 +361,7 @@ public class Client {
                 }
             }
         }
-        String todelete[] = new String[rowLen];
+        String todelete[] = new String[tl+rb];
         for(int counter = 0; counter < tl; counter++) {
             todelete[counter] = isofunc2[counter];
         }
