@@ -1,32 +1,22 @@
 import java.io.*;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.*;
 import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.net.*;
-import javax.swing.text.*;
+import java.util.*;
+import javax.swing.*;
 import javax.crypto.Mac;
-import java.io.UnsupportedEncodingException;
+import javax.swing.text.*;
+import javax.imageio.ImageIO;
 import java.security.MessageDigest;
+import java.awt.image.BufferedImage;
 import java.security.NoSuchAlgorithmException;
 
 public class Server {
     
-    static JScrollPane history;
-    static JTextPane chatLabel;
-    static DefaultListModel model;
-    static JList list;
-    static JFrame mainFrame;
+    private static JTextPane chatLabel;
+    private static DefaultListModel model;
     
     public static void setupUI() {
-        mainFrame = new JFrame("Server UI");
+        JFrame mainFrame = new JFrame("Server UI");
         
         // History Bar
         
@@ -42,11 +32,11 @@ public class Server {
         
         model = new DefaultListModel();
         model.addElement(new HistoryEntry("Let's begin", "Images/Past.png"));
-        list = new JList(model);
+        JList list = new JList(model);
         font = new Font("Helvetica Neue", Font.PLAIN, 15);
         list.setFont(font);
         list.setCellRenderer(new HistoryCellRenderer());
-        history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane history = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         history.setBorder(BorderFactory.createEmptyBorder());
         
         // Main
@@ -191,7 +181,6 @@ public class Server {
         }
         return true;
     }
-    
     
     public static String[][] bitCommit(String[][] list1, String[][] list2, String[][] list3){
         String[][] commitment = new String[list3.length][list3.length];

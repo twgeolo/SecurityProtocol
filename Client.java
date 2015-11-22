@@ -1,25 +1,14 @@
 import java.io.*;
-import java.net.Socket;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.File;
-import java.io.FileWriter;
-import javax.swing.JOptionPane;
-import java.io.ObjectInputStream;
-import javax.crypto.Mac;
-import java.util.*;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.net.*;
+import java.util.*;
+import javax.swing.*;
+import javax.crypto.Mac;
 import javax.swing.text.*;
+import javax.imageio.ImageIO;
+import java.security.MessageDigest;
+import java.awt.image.BufferedImage;
+import java.security.NoSuchAlgorithmException;
 
 public class Client {
     
@@ -62,12 +51,12 @@ public class Client {
         mainBar.setOpaque(true);
         mainBar.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 0, Color.gray));
         
-        // Victor image
+        // Peggy image
         
         ImagePanel peggyPanel = new ImagePanel("Images/Peggy.png");
         peggyPanel.setBackground(Color.white);
         
-        // Victor label
+        // Peggy label
         
         JLabel peggyLabel = new JLabel("Peggy", JLabel.CENTER);
         font = new Font("Helvetica Neue", Font.BOLD, 20);
@@ -76,7 +65,7 @@ public class Client {
         peggyLabel.setBackground(Color.white);
         peggyLabel.setOpaque(true);
         
-        // Victor chat box
+        // Peggy chat box
         
         chatLabel = new JTextPane();
         font = new Font("Helvetica Neue", Font.PLAIN, 15);
@@ -133,8 +122,6 @@ public class Client {
     private static String[] isofunc2;
     private static int isocheck = 0;
     private static ObjectOutputStream out;
-    
-    
     
     public static String[][] createMatrix(int size) {
         String matrix[][] = new String[size][size];
