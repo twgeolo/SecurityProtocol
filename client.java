@@ -764,6 +764,36 @@ public class client {
                     matrixcopy2[counter][counter2] = matrix2[counter][counter2];
                 }
             }
+            
+            x = 0;
+            String matrix3[] = new String[1100];
+            FileInputStream inputStream3 = new FileInputStream(ifile);
+            while (inputStream3.available() > 0) {
+                current = (char) inputStream3.read();
+                if(x == 0) {
+                    tl = (int)(current-'0');
+                    x++;
+                    continue;
+                }
+                if(x == 2) {
+                    rb = (int)(current-'0');
+                    x++;
+                    continue;
+                }
+                if(current == '\n') {
+                    x++;
+                    continue;
+                }
+                matrix3[x-4] = String.valueOf(current);
+            }
+            System.out.println(x);
+            isofunc = new String[x-4];
+            for(int counter = 0; counter < x-4; counter++) {
+                isofunc[counter] = matrix3[counter];
+                System.out.println(isofunc[counter]);
+            }
+            System.out.println(isofunc.length);
+
             out = new ObjectOutputStream(MyClient.getOutputStream());
             out.writeObject(matrixcopy);
             out.writeObject(matrixcopy2);
