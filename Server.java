@@ -85,7 +85,7 @@ public class Server {
         mainBar.setBounds(320, 0, 448, 33);
         victorPanel.setBounds(494, 288, 100, 100);
         victorLabel.setBounds(494, 388, 100, 30);
-        chatLabel.setBounds(369, 163, 350, 40);
+        chatLabel.setBounds(344, 163, 400, 40);
         
         // Add the subviews
         
